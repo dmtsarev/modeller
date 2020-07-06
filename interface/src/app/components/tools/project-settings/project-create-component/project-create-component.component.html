@@ -1,0 +1,40 @@
+<mat-card class="project_form">
+  <mat-card-header>
+    <mat-card-title>
+      <h2>Create Project</h2>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form name="create_project" class="project_form" [formGroup]="createProjectForm" (ngSubmit)="createProject()">
+      <mat-form-field class="form_field">
+        <input id="projectName" matInput placeholder="Project name" formControlName="projectName">
+      </mat-form-field>
+      <mat-form-field class="form_field">
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+      <div formGroupName="git">
+        <h3>Git Repository</h3>
+        <mat-form-field class="form_field">
+          <input id="path" matInput placeholder="Path" formControlName="uri">
+        </mat-form-field>
+        <mat-form-field class="form_field">
+          <input id="username" matInput placeholder="Username" formControlName="username">
+        </mat-form-field>
+        <mat-form-field class="form_field">
+          <input id="password" matInput placeholder="Password" type="password" formControlName="password">
+        </mat-form-field >
+
+        <mat-error *ngIf="git.hasError('connectionFailed')">Connection Failed</mat-error>
+      </div>
+      <div>
+        <button type="submit" mat-raised-button color="primary">Create</button>
+        <button mat-raised-button color="accent" type="button" (click)="testConnection()" style="display: inline-block">Test</button>
+        <span style="display: inline-block" *ngIf="(loading$| async)">
+          <mat-spinner diameter="30" style="margin:0 auto;" mode="indeterminate"></mat-spinner>
+        </span>
+        <button mat-flat-button (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+

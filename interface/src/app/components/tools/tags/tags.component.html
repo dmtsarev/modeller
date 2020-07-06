@@ -1,0 +1,54 @@
+<div class="header-card">
+  <mat-label class="label-header">List of Tags</mat-label>
+  <button mat-stroked-button (click)="openDialogCreateTag()">Create tag
+    <mat-icon>label</mat-icon>
+  </button>
+  <button mat-stroked-button (click)="openDialogCreateTagType()">Create tags type
+    <mat-icon>class</mat-icon>
+  </button>
+</div>
+
+<div class="accordion-div">
+  <mat-accordion multi="true">
+    <div *ngIf="(tagsType$|async) as tags">
+      <div *ngFor="let tagType of tags">
+        <mat-expansion-panel (opened)="getTags(tagType)">
+          <mat-expansion-panel-header class="mat-panel-header">
+            <mat-panel-title [style.color]="tagType.color ? tagType.color : ''">
+              {{tagType.name}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{tagType.description}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div *ngFor="let tag of  tagsTypeMap.get(tagType.name)" class="tag-card">
+            <div class="tag-card-header">
+              <mat-icon class="tag-card-icon">label</mat-icon>
+              <mat-label class="label-header">{{tag.name}}</mat-label>
+              <button mat-icon-button (click)="openSettings(tag)" matTooltip="Settings Tag">
+                <mat-icon>settings</mat-icon>
+              </button>
+              <button mat-icon-button (click)="removeTags(tag)" matTooltip="Remove Tag">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </div>
+              <ng-container *ngIf="tag.description; else emptyValue" class="description-block">
+                <label class="label-title">Description:</label>
+                <label>{{tag.description}}</label>
+              </ng-container>
+              <ng-template #emptyValue></ng-template>
+          </div>
+          <button mat-stroked-button *ngIf = 'tagType.name.toLowerCase() !== "none"' (click)="openDialogSettingsTagType(tagType)">Settings tags type
+            <mat-icon>settings</mat-icon>
+          </button>
+          <button mat-stroked-button (click)="removeTagsType(tagType)">Remove tags type
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </mat-accordion>
+</div>
+
+
+

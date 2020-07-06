@@ -1,0 +1,68 @@
+.header-card {
+  border-bottom-color: #673ab7;
+  border-bottom-style: double;
+  padding: 0 10px 15px 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 15px;
+}
+
+.label-header {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: left;
+  margin-top: 5px;
+  font-size: 20px;
+}
+
+.icon-avatar {
+  color: #673ab7;
+}
+
+.label-title {
+  font-weight: 500;
+  padding-right: 5px;
+  text-decoration: underline solid rgb(68, 68, 68);
+}
+
+.permission-block {
+  display: flex;
+  justify-content: left;
+}
+
+.role-block {
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.mat-list-base {
+  padding-top: 0 !important;
+  margin: 0 !important;
+}
+
+.mat-list-item-content {
+  padding-top: 0 !important;
+  margin: 0 !important;
+}
+
+.permission-list {
+  display: flex;
+  justify-content: left;
+}
+
+.mat-icon-tooltip {
+  padding-left: 3px;
+  transform: scale(0.7);
+  color: #673ab7;
+}
+
+.card-user-content {
+  background-color: #fafafa;
+}
+
+.accordion-div {
+  max-height: 85vh;
+  width: 100%;
+  overflow: auto;
+}

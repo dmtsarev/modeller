@@ -1,0 +1,60 @@
+<div class="header-card">
+  <mat-label class="label-header">List of Users</mat-label>
+  <button mat-stroked-button>Create users
+    <mat-icon>account_circle</mat-icon>
+  </button>
+</div>
+<div class="accordion-div">
+  <mat-accordion multi="true">
+    <div *ngIf="(users$|async) as users">
+      <div *ngFor="let user of users">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="mat-panel-header">
+            <mat-panel-title>
+              {{user.userName}}
+            </mat-panel-title>
+            <mat-panel-description>
+              <ng-container *ngIf="user.project; else emptyValue">
+                {{user.project.projectName}}
+              </ng-container>
+              <ng-template #emptyValue>User without project</ng-template>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-card>
+            <mat-card-header>
+              <div mat-card-avatar>
+                <mat-icon class="icon-avatar">accessibility</mat-icon>
+              </div>
+              <mat-card-title>{{user.userName.toUpperCase()}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="card-user-content">
+              <div class="role-block">
+                <label class="label-title">Role:</label>
+                <label>{{user.role.roleName}}</label>
+              </div>
+              <div class="permission-block">
+                <label class="label-title">Permission:</label>
+                <ul>
+                    <li *ngFor="let permission of user.role.permissions">
+                      <div class="permission-list">
+                        <label>{{permission.mnemonic}}</label>
+                        <mat-icon matTooltip="{{permission.permission}}" [matTooltipPosition]="position.value"
+                                  class="mat-icon-tooltip">help_outline
+                        </mat-icon>
+                      </div>
+                    </li>
+                </ul>
+              </div>
+              <p>{{user.role.description}}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-stroked-button>Settings
+                <mat-icon>settings</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </mat-accordion>
+</div>

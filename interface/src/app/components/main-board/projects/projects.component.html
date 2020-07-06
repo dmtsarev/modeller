@@ -1,0 +1,40 @@
+<mat-card class="full-size">
+  <mat-card-header>
+    <mat-card-title>
+      Projects
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+      <mat-spinner></mat-spinner>
+    </div>
+    <mat-table [dataSource]="dataSource" *ngIf="dataSource.nonEmpty$ | async; else noProjects">
+      <ng-container matColumnDef="seqNo">
+        <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+        <mat-cell *matCellDef="let project">
+          <a [routerLink]="['/projects/' + project.projectId]">
+            <span>{{project.projectId}}</span>
+          </a>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="projectName">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let project">
+          <a [routerLink]="['/projects/' + project.projectId]">
+            <span>{{project.projectName}}</span>
+          </a>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+        <mat-cell *matCellDef="let project">{{project.description}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+    <ng-template #noProjects>
+      <h3>No projects available</h3>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

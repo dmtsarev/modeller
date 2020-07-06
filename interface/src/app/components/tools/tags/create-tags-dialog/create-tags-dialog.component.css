@@ -1,0 +1,13 @@
+.tags-container {
+  display: flex;
+  flex-direction: column;
+  flex: initial;
+  min-width: 25vh;
+  resize: both;
+}
+
+.form-button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+

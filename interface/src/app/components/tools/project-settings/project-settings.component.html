@@ -1,0 +1,39 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Projects
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button mat-stroked-button [routerLink]="['./create']" style="float: right">Create project</button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+<div class="header-card">
+  <mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="projectName">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let project">
+        <a [routerLink]="['./view']" [queryParams]="{projectId:project.projectId}">
+          <span>{{project.projectName}}</span>
+        </a>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="projectDescription">
+      <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+      <mat-cell *matCellDef="let project">{{project.description}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="projectStatus">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let project">
+        <mat-icon *ngIf="project.status=='CREATED'" color="primary">done</mat-icon>
+        <mat-icon *ngIf="project.status=='PENDING'" color="accent">sync</mat-icon>
+        <mat-icon *ngIf="project.status=='ERROR'" color="warn">error</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</div>
+  </mat-card-content>
+</mat-card>

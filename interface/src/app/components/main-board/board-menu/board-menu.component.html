@@ -1,0 +1,20 @@
+<!--<mat-tab-group>
+  <mat-tab label="Project documentation">
+  </mat-tab>
+  <mat-tab label="Release history">
+    <router-outlet></router-outlet>
+  </mat-tab>
+  <mat-tab label="Object comparison">
+  </mat-tab>
+  <mat-tab label="Admin tools">
+  </mat-tab>
+</mat-tab-group>-->
+
+<nav mat-tab-nav-bar>
+  <a mat-tab-link>Project docs</a>
+  <a mat-tab-link [routerLink]="['./releases']">Release history</a>
+  <a mat-tab-link>Object comparison</a>
+  <a mat-tab-link>Admin tools</a>
+</nav>
+
+<router-outlet></router-outlet>

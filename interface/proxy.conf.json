@@ -1,0 +1,9 @@
+{
+  "/enomanager/api/*": {
+    "target": "http://localhost:8020/api",
+    "secure": false,
+    "pathRewrite": {
+      "^/enomanager/api/": ""
+    }
+  }
+}

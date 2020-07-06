@@ -1,0 +1,32 @@
+<form [formGroup]="tagPicker" (submit)="onSubmit()">
+  <div mat-dialog-content class="tags-container">
+  <mat-chip-list aria-label="Fish selection">
+    <mat-chip *ngFor="let tag of selectedTagList" [ngStyle]="{'background-color': tag?.type?.color}"
+              [selectable]="selectable" [removable]="removable" selected (removed)="remove(tag)">
+      {{tag.name}}<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon></mat-chip>
+  </mat-chip-list>
+    <div>
+  <mat-form-field>
+    <mat-select placeholder="Type" formControlName="type">
+      <mat-option value="none"></mat-option>
+      <mat-option *ngFor="let tagType of (tagTypes$ | async)" [value]="tagType">{{tagType.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+    <div>
+      <mat-form-field >
+        <mat-select placeholder="Tag" formControlName="tag">
+          <mat-option *ngFor="let tagItem of (tags$ | async)" [value]="tagItem">{{tagItem.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span>
+        <button mat-button (click)="addTagToList()" type="button">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </span>
+    </div>
+    </div>
+
+  </div>
+  <button mat-stroked-button color="primary" type="submit">Save</button>
+</form>
+

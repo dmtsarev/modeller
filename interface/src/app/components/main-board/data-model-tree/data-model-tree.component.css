@@ -1,0 +1,16 @@
+mat-tree {
+  padding-right: 10px;
+}
+img {
+  width: auto;
+  height: auto;
+}
+
+.tree-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-tree-progress-bar {
+  margin-left: 30px;
+}

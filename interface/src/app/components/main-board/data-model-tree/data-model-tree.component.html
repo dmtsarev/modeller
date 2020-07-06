@@ -1,0 +1,21 @@
+<div class="tree-container">
+  <mat-form-field>
+    <input matInput #searchInput placeholder="Search" (input)="searchWord(searchInput.value)">
+  </mat-form-field>
+<mat-tree [treeControl]="dataSource.treeControl" [dataSource]="dataSource">
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+    <button mat-icon-button disabled ></button>
+    <img alt="node type" src="{{'./assets/' + node.type + '.png'}}" >
+    <p (click)="nodeClicked(node)">{{node.name}}</p>
+  </mat-tree-node>
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+    <button mat-icon-button matTreeNodeToggle>
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{dataSource.treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+    </button>
+    {{node.name}}
+    <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" class="example-tree-progress-bar"></mat-progress-bar>
+  </mat-tree-node>
+</mat-tree>
+</div>

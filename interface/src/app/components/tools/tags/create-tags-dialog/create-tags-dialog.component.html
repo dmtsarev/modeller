@@ -1,0 +1,29 @@
+<form [formGroup]="tagForm" (submit)="onSubmit()">
+<h1 mat-dialog-title>Create Tag</h1>
+<div mat-dialog-content class="tags-container">
+  <mat-form-field>
+    <input matInput placeholder="Enter name tag" formControlName="name"/>
+    <mat-error *ngIf="name.errors?.required">
+      Name Tag is <strong>required</strong>
+    </mat-error>
+    <mat-error *ngIf="name.errors?.maxLength">Max length is 256.</mat-error>
+    <!--<mat-hint *ngIf="existName" class="mat-exist-name">Name Tag already <strong>exist</strong></mat-hint>-->
+  </mat-form-field>
+  <mat-form-field >
+    <textarea matInput placeholder="Description" formControlName="description"></textarea>
+  </mat-form-field>
+  <mat-form-field formGroupName="type">
+    <mat-select placeholder="Type" formControlName="name">
+        <mat-option value="none">-- None --</mat-option>
+      <mat-optgroup> Created types
+        <mat-option *ngFor="let type of (tagTypes$ | async)" [value]="type.name">{{type.name}}</mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="form-button-container">
+    <button mat-stroked-button color="primary" type="submit">Save</button>
+    <button mat-stroked-button color="primary" (click)="closeDialog()" type="button">Cancel</button>
+  </div>
+</div>
+</form>

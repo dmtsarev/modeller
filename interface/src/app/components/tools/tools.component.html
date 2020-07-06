@@ -1,0 +1,23 @@
+<mat-sidenav-container autosize>
+  <mat-sidenav mode="side" opened role="navigation" [disableClose]="true">
+    <mat-nav-list>
+      <mat-list-item [routerLink]="['./tags']">
+        <mat-icon>label</mat-icon>
+        Tags
+      </mat-list-item>
+      <mat-list-item [routerLink]="['./users']">
+        <mat-icon>account_circle</mat-icon>
+        Users
+      </mat-list-item>
+      <mat-list-item [routerLink]="['./projects']">
+        <mat-icon>account_circle</mat-icon>
+        Projects
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

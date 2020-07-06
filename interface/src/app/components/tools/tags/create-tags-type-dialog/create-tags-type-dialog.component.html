@@ -1,0 +1,23 @@
+<form [formGroup]="tagTypeForm" (submit)="onSubmit()">
+<h1 mat-dialog-title>Create Tags Type</h1>
+<div mat-dialog-content class="tags-container">
+  <mat-form-field>
+    <input matInput id="name" placeholder="Enter name tags type" formControlName="name"/>
+    <mat-error *ngIf="name.errors?.required">
+      Name Tag is <strong>required</strong>
+    </mat-error>
+    <mat-error *ngIf="name.errors?.maxlength">Max length is 256.</mat-error>
+    <!--<mat-hint *ngIf="existName" class="mat-exist-name">Name Tag Type already <strong>exist</strong></mat-hint>-->
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput id="description"  placeholder="Description" formControlName="description"></textarea>
+  </mat-form-field>
+  <div class="picker">
+    <app-color-picker heading="Background" formControlName="color"></app-color-picker>
+  </div>
+  <div class="form-button-container">
+    <button mat-stroked-button color="primary" type="submit">Save</button>
+    <button mat-stroked-button color="primary" (click)="closeDialog()" type="button">Cancel</button>
+  </div>
+</div>
+</form>

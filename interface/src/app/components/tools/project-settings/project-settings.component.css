@@ -1,0 +1,10 @@
+a {
+  color: #0052cc;
+}
+span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  white-space: normal;
+  vertical-align: top;
+}

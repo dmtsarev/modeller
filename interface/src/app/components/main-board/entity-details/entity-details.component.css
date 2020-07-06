@@ -1,0 +1,41 @@
+mat-card-header {
+  flex: 1;
+}
+.padding-class .edit-button {
+  margin: 0 0 0 auto;
+  display: flex;
+  color: #ffffff;
+}
+.padding-class:hover .edit-button {
+  margin: 0 0 0 auto;
+  display: flex;
+  color: initial;
+}
+.padding-class .edit-button:hover {
+  margin: 0 0 0 auto;
+  display: flex;
+  color: initial;
+}
+.padding-class {
+  padding: 10px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+}
+.padding-class:hover {
+  padding: 10px;
+  border: 1px solid #ececec;
+  border-radius: 5px;
+}
+mat-card {
+  height: unset;
+}
+mat-card-content {
+  height: 100%;
+}
+.underline {
+  border-bottom: 1px solid #ececec;
+  margin-bottom: 10px;
+}
+button {
+  border: 1px solid #ececec;
+}

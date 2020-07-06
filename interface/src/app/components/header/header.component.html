@@ -1,0 +1,10 @@
+<mat-toolbar color="primary" class="mat-toolbar app-header">
+  <div>
+    <img alt="icon" [src]="'/assets/logo.png'" style="width:50px;" routerLink="/">
+  </div>
+  <span class="nav-tool-items">
+    <a *ngIf="(isAuthenticated|async)"  mat-button routerLink="/tools" routerLinkActive="active">Tools</a>
+    <a *ngIf="!(isAuthenticated|async)" mat-button routerLink="/login" routerLinkActive="active">Log in</a>
+      <a *ngIf="(isAuthenticated|async)" mat-button routerLinkActive="active" (click)="logout()">Log out</a>
+    </span>
+</mat-toolbar>

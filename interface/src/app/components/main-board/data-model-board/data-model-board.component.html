@@ -1,0 +1,10 @@
+<mat-sidenav-container class="example-container" autosize>
+  <mat-sidenav mode="side" opened role="navigation">
+    <app-data-model-tree  (elementSelected)="showElement($event)"></app-data-model-tree>
+  </mat-sidenav>
+  <mat-sidenav-content>
+      <div *ngIf="(enoviaEntity$|async) as item">
+        <app-entity-details [entity]="item"></app-entity-details>
+      </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

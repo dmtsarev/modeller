@@ -1,0 +1,8 @@
+.tags-container {
+  display: flex;
+  flex-direction: column;
+  flex: initial;
+  min-width: 25vh;
+  max-width: 25vh;
+  max-height: max-content;
+}
