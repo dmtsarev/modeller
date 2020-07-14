@@ -1,5 +1,6 @@
 package ru.ase.ims.enomanager.model.enovia.xml;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,6 +20,9 @@ public class Role {
 
     @XmlElement(name = "parentRole")
     private ParentRole parentRole;
+
+    @XmlAttribute(name = "id")
+    private String id;
 
     public AdminProperties getAdminProperties() {
         return adminProperties;
@@ -58,5 +62,13 @@ public class Role {
 
     public void setParentRole(ParentRole parentRole) {
         this.parentRole = parentRole;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
