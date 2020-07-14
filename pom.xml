@@ -30,25 +30,6 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://jfrog.niaepnn.ru/artifactory/list/libs-release/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <url>http://jfrog.niaepnn.ru/artifactory/list/libs-release/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -167,7 +148,7 @@
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-jdk8</artifactId>
+            <artifactId>mapstruct</artifactId>
             <version>RELEASE</version>
         </dependency>
     </dependencies>

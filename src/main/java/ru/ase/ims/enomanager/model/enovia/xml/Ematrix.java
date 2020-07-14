@@ -25,12 +25,16 @@ public class Ematrix {
     @XmlElement(name = "relationshipDef")
     private RelationshipDef relationshipDef;
 
+    @XmlElement(name = "role")
+    private Role role;
+
     public Ematrix(Ematrix ematrix) {
         this.type = ematrix.type;
         this.attributeDef = ematrix.attributeDef;
         this.creationProperties = ematrix.creationProperties;
         this.interfaceType = ematrix.interfaceType;
         this.relationshipDef = ematrix.relationshipDef;
+        this.role = ematrix.role;
     }
 
     public Ematrix() {}
@@ -75,6 +79,14 @@ public class Ematrix {
         this.attributeDef = attributeDef;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "Ematrix{" +
@@ -83,6 +95,7 @@ public class Ematrix {
                 ", interfaceType=" + interfaceType +
                 ", attributeDef=" + attributeDef +
                 ", relationshipDef=" + relationshipDef +
+                ", role=" + role +
                 '}';
     }
 }

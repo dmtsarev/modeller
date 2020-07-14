@@ -86,6 +86,8 @@ public class DefaultXMLReader implements XMLReader {
             return new EnoviaInterface(item);
         } else if (type.startsWith("relationship")) {
             return new EnoviaRelationship(item);
+        } else if (type.startsWith("role")) {
+            return new EnoviaRole(item);
         }
         return null;
     }

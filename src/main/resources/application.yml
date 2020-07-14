@@ -32,7 +32,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:6432/enomanager
     username: postgres
-    password:
+    password: admin
     driverClassName: org.postgresql.Driver
   jpa:
     properties:
