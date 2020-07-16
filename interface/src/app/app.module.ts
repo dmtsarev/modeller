@@ -30,7 +30,7 @@ import {
   MatSelectModule,
   MatExpansionModule,
   MatTooltipModule,
-  MatProgressBarModule
+  MatProgressBarModule, MatAutocompleteModule
 } from '@angular/material';
 import { CdkColumnDef } from '@angular/cdk/table';
 import {CoreModule} from './core';
@@ -59,6 +59,8 @@ import { ProjectDetailsSettingsComponent } from './components/tools/project-sett
 import { BreadCrumbsComponent } from './components/common/bread-crumbs/bread-crumbs.component';
 import { ProjectsComponent } from './components/main-board/projects/projects.component';
 import {EventsServiceService} from './services/events-service.service';
+import { SearchByTagComponent } from './components/main-board/search-by-tag/search-by-tag.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -85,7 +87,8 @@ import {EventsServiceService} from './services/events-service.service';
     ProjectCreateComponentComponent,
     ProjectDetailsSettingsComponent,
     BreadCrumbsComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    SearchByTagComponent,
   ],
   imports: [
     BrowserModule,
@@ -119,7 +122,9 @@ import {EventsServiceService} from './services/events-service.service';
     MatSelectModule,
     MatExpansionModule,
     MatTooltipModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatAutocompleteModule,
+    MatSortModule
   ],
   providers: [CdkColumnDef, NoAuthGuard, EventsServiceService],
   bootstrap: [AppComponent],

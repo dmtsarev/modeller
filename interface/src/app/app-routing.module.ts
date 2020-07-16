@@ -12,6 +12,7 @@ import {ProjectSettingsComponent} from './components/tools/project-settings/proj
 import {ProjectViewComponentComponent} from './components/tools/project-settings/project-view-component/project-view-component.component';
 import {ProjectCreateComponentComponent} from './components/tools/project-settings/project-create-component/project-create-component.component';
 import {ProjectsComponent} from './components/main-board/projects/projects.component';
+import {SearchByTagComponent} from './components/main-board/search-by-tag/search-by-tag.component';
 
 const routes: Routes = [
 
@@ -64,6 +65,10 @@ const routes: Routes = [
         path: 'releases/:releaseId',
         component: DataModelBoardComponent,
       },
+      {
+        path: 'search-by-tag',
+        component: SearchByTagComponent
+      }
     ]
   },
   {
