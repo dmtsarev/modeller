@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface SearchByTagService {
-    List<EnoviaEntity> getEntityList(Set<String> tags);
+    List<EnoviaEntity> getEntityList(Set<Long> tags);
 }

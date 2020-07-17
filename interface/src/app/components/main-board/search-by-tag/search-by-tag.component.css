@@ -1,3 +1,21 @@
 .example-chip-list {
   width: 100%;
 }
+
+.color-border-chip {
+  border : 1px solid #d8d8da;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.example-container{
+  height: 45px;
+}
+
+.example-form-field{
+  max-width: 300px;
+}

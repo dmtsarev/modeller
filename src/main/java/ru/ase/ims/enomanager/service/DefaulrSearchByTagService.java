@@ -17,7 +17,8 @@ public class DefaulrSearchByTagService implements SearchByTagService {
     }
 
     @Override
-    public List<EnoviaEntity> getEntityList(Set<String> tags) {
-        return entityRepository.findDistinctByTagsNameIn(tags);
+    public List<EnoviaEntity> getEntityList(Set<Long> tags) {
+        //return entityRepository.findDistinctByTagsNameIn(tags);
+        return entityRepository.findDistinctByTagsIdIn(tags);
     }
 }
