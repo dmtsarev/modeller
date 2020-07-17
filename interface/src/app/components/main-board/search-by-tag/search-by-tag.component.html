@@ -1,30 +1,41 @@
 <div class="tree-container">
   <mat-form-field>
-    <input type="text"
-           placeholder="Add search"
-           aria-label="Number"
+    <input tabindex="0"
+           placeholder="Select tag"
+           #tagInput
+           aria-label="Tag"
            matInput
            [formControl]="myControl"
            [matAutocomplete]="auto">
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option (onSelectionChange)="callSomeFunction($event, tag.name)"
-                  *ngFor="let tag of tags | async" [value]="tag.name">
-        {{tag.name}}
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let tag of tags | async "
+        [value]="tag.name"
+        (onSelectionChange)="callSomeFunction($event, tag);">
+        <mat-icon class="mat-icon notranslate material-icons"
+                  role="img" [ngStyle]="{'color':tag.type.color}">label</mat-icon>
+        <span>{{tag.name}}</span>
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
-  <mat-table #table [dataSource]="dataSource" class="example-table">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-    <!-- Number Column -->
+  <mat-form-field class="example-chip-list">
+    <mat-chip-list aria-label="Search by tag">
+      <mat-chip
+        *ngFor="let tag of nameTags"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(tag)"
+        [ngStyle]="{'background':tag.type.color}">
+        {{tag.name}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+  </mat-form-field>
+  <mat-table [dataSource]="dataSource" class="example-table">
     <ng-container matColumnDef="Id">
       <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
       <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
     </ng-container>
-
-    <!-- Title Column -->
     <ng-container matColumnDef="Name">
       <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
       <mat-cell *matCellDef="let row">{{ row.entityName }}</mat-cell>
@@ -33,4 +44,5 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+
 </div>

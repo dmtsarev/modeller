@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChildren} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {EnoviaEntity} from '../../../model/enovia-entity';
-import {EntityService} from '../../../core/services/entity.service';
 import {ActivatedRoute} from '@angular/router';
 import {ApiService} from '../../../core/services';
 import {Tag} from '../../../model/tag';
 import {SearchByTagService} from '../../../core/services/search-by-tag.service';
-import {MatOptionSelectionChange, MatTableDataSource} from '@angular/material';
-import {TagTableService} from '../../../core/services/tag-table.service';
+import {
+  MatOptionSelectionChange,
+  MatTableDataSource
+} from '@angular/material';
 
 @Component({
   selector: 'app-search-by-tag',
@@ -22,32 +23,45 @@ export class SearchByTagComponent implements OnInit {
   enoviaEntities: Observable<EnoviaEntity[]>;
   displayedColumns = ['Id', 'Name'];
   dataSource = new MatTableDataSource();
+  selectable = true;
+  removable = true;
+  nameTags: Tag[] = [];
 
   constructor(private route: ActivatedRoute,
               private apiService: ApiService,
               private searchByTagService: SearchByTagService,
-              private entityService: EntityService,
-              private tagTableService: TagTableService) {
+              @ViewChildren('tagInput') private tagInput: ElementRef<HTMLInputElement>) {
   }
 
   ngOnInit() {
     this.tags = this.searchByTagService.getTags();
+    this.tags.toPromise().then(p => p.forEach(j => console.log(j.type.color)));
   }
 
-  callSomeFunction(event: MatOptionSelectionChange , nameTag: string) {
+  callSomeFunction(event: MatOptionSelectionChange , tag: Tag) {
     if (event.isUserInput) {
-      console.log(nameTag);
-      this.enoviaEntities = this.searchByTagService.getEntities(nameTag, true);
-      this.enoviaEntities.toPromise().then(p => p.forEach( j => console.log(j.entityName)));
+      //this.myControl.reset();
+      this.nameTags.push(tag);
+      this.enoviaEntities = this.searchByTagService.getEntities(tag.name, true);
       this.enoviaEntities.subscribe(res => {
         this.dataSource.data = res;
       });
-      // this.tagTableService.setDataTable(this.enoviaEntitis);
-      // this.tagTable = new TagTableComponent(this.tagTableService);
-      // this.enoviaEntitis = this.searchByTagService.getEntities(1, 'type', nameTag);
+      this.tagInput.nativeElement.blur();
     }
   }
 
+  remove(tag: Tag): void {
+    const index = this.nameTags.indexOf(tag);
 
+    if (index >= 0) {
+      this.nameTags.splice(index, 1);
+    }
 
+    console.log(this.nameTags);
+
+    this.enoviaEntities = this.enoviaEntities = this.searchByTagService.getEntities(tag.name, false);
+    this.enoviaEntities.subscribe(res => {
+      this.dataSource.data = res;
+    });
+  }
 }
