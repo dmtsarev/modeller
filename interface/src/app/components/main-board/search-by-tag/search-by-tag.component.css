@@ -19,3 +19,16 @@
 .example-form-field{
   max-width: 300px;
 }
+
+.mat-chip-margin{
+  margin-right: 5px;
+}
+
+.example-mat-select{
+  max-width: 300px;
+}
+
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}

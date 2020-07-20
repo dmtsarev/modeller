@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ase.ims.enomanager.model.EnoviaEntity;
 import ru.ase.ims.enomanager.model.Tag;
+import ru.ase.ims.enomanager.service.DefaultReleaseManager;
 import ru.ase.ims.enomanager.service.DefaultTagService;
 import ru.ase.ims.enomanager.service.EntityService;
 import ru.ase.ims.enomanager.service.SearchByTagService;
@@ -28,22 +29,26 @@ import java.util.Set;
 public class DefaultSearchByTagController {
     private final SearchByTagService searchByTagService;
     private final DefaultTagService tagService;
-    private Set<Long> tags = new HashSet<Long>();
 
     @ApiOperation(value = "Returns list of entities for specified tags", response = List.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 404, message = "Release not found"),
     })
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<EnoviaEntity> getEnoviaEntities(@RequestParam(name = "tag") Long tag,
-                                                @RequestParam(name = "action") Boolean action) {
-        if(action){
-            tags.add(tag);
-        }else{
-            tags.remove(tag);
-        }
+    @GetMapping(path = "/entities", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<EnoviaEntity> getEnoviaEntities(@RequestParam(name = "tags") Set<Long> tags) {
         return  searchByTagService.getEntityList(tags);
+    }
+
+    @ApiOperation(value = "Returns list of entities for specified tags and releases", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "Release not found"),
+    })
+    @GetMapping(path = "/releases/entities", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<EnoviaEntity> getEnoviaEntities(@RequestParam(name = "tags") Set<Long> tags,
+                                                @RequestParam(name = "releases") Set<Long> releases) {
+        return  searchByTagService.getEntityListByReleases(tags, releases);
     }
 
     @ApiOperation(value = "Returns list of tags", response = Tag.class)
@@ -59,5 +64,14 @@ public class DefaultSearchByTagController {
         } else {
             return ResponseEntity.ok().body(tags);
         }
+    }
+
+    @ApiOperation(value = "Returns list of id releases", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+    })
+    @GetMapping(path="/releases", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Long> releases() {
+        return searchByTagService.getReleaseList();
     }
 }

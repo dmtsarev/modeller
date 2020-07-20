@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.ase.ims.enomanager.model.EnoviaEntity;
+import ru.ase.ims.enomanager.model.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,5 +24,6 @@ public interface EntityRepository extends JpaRepository<EnoviaEntity, Long> {
 //    @Query(value = "FROM EnoviaEntity e WHERE e.tags IN :tags")
 //    List<EnoviaEntity> findDistinctByTagsNameIn(@Param("tags") Set<String> tags);
 
-    List<EnoviaEntity> findDistinctByTagsIdIn(Set<Long> tag);
+    List<EnoviaEntity> findDistinctByTagsIdIn(Set<Long> tags);
+    List<EnoviaEntity> findDistinctByTagsIdInAndReleaseIdIn(Set<Long> tags, Set<Long> releases);
 }

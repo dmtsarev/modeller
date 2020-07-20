@@ -1,5 +1,5 @@
-import {Component, ElementRef, OnInit, ViewChildren} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {EnoviaEntity} from '../../../model/enovia-entity';
 import {ActivatedRoute} from '@angular/router';
@@ -10,7 +10,7 @@ import {
   MatOptionSelectionChange,
   MatTableDataSource
 } from '@angular/material';
-import {filter, map, startWith} from 'rxjs/operators';
+import {map, scan, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-by-tag',
@@ -19,36 +19,87 @@ import {filter, map, startWith} from 'rxjs/operators';
 })
 export class SearchByTagComponent implements OnInit {
 
-  tags: Observable<Tag[]>;
-  myControl = new FormControl();
-  enoviaEntities: Observable<EnoviaEntity[]>;
-  displayedColumns = ['Id', 'Name'];
+  tags$: Observable<Tag[]>;
+  enoviaEntities$: Observable<EnoviaEntity[]>;
+  displayedColumns = ['Id', 'Name', 'Tags'];
   dataSource = new MatTableDataSource();
   selectable = true;
   removable = true;
   nameTags: Tag[] = [];
   options: Tag[] = [];
   isNewSearch = true;
+  releaseList$: Observable<string[]>;
+  all = '0';
+  myControl = new FormControl();
+  releasesForm = new FormControl('', Validators.required);
 
   constructor(private route: ActivatedRoute,
               private apiService: ApiService,
-              private searchByTagService: SearchByTagService,
-              @ViewChildren('tagInput') private tagInput: ElementRef<HTMLInputElement>) {
+              private searchByTagService: SearchByTagService) {
   }
 
   ngOnInit() {
-    this.tags = this.searchByTagService.getTags();
-    this.tags.subscribe((res) => {
+    this.tags$ = this.searchByTagService.getTags();
+    this.releaseList$ = this.searchByTagService.getReleases();
+
+    this.tags$.subscribe((res) => {
       this.options = res.slice();
     });
 
     this.myControl.valueChanges.subscribe(value => { console.log(value); });
 
-    this.tags = this.myControl.valueChanges
+    this.tags$ = this.myControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filter(value))
       );
+  }
+
+  private _filter(value: string): Tag[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+
+  chooseAll() {
+    if (this.releasesForm.value && this.releasesForm.value.indexOf(this.all) >= 0) {
+      this.releaseList$.toPromise().then(p => { this.releasesForm.patchValue([this.all].concat(p)); });
+      if (this.nameTags.length !== 0) {
+        this.startSearchTags();
+      }
+    } else {
+      this.releasesForm.reset();
+    }
+  }
+
+  chooseOne() {
+    const values = this.releasesForm.value;
+    if (values.indexOf(this.all) >= 0) {
+      values.splice(values.indexOf(this.all, 1));
+      this.releasesForm.patchValue(values);
+    } else {
+      this.releaseList$.toPromise().then(p => {
+        if (p.length === values.length) {
+          this.releasesForm.patchValue([this.all].concat(p));
+        }
+      });
+    }
+
+    if (this.nameTags.length !== 0) {
+      this.startSearchTags();
+    }
+  }
+
+  startSearchTags() {
+    const idTags: number[] = [];
+    this.nameTags.forEach(value => idTags.push(value.id));
+    if (this.releasesForm.value && this.releasesForm.value.indexOf(this.all) >= 0) {
+      this.enoviaEntities$ = this.searchByTagService.getAllReleasesEntities(idTags);
+    } else {
+      this.enoviaEntities$ = this.searchByTagService.getEntities(idTags, this.releasesForm.value);
+    }
+    this.enoviaEntities$.subscribe(res => {
+      this.dataSource.data = res;
+    });
   }
 
   onFocus() {
@@ -59,19 +110,15 @@ export class SearchByTagComponent implements OnInit {
     }
   }
 
-  private _filter(value: string): Tag[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
-
   callSomeFunction(event: MatOptionSelectionChange , tag: Tag) {
     if (event.isUserInput) {
       if (this.nameTags.indexOf(tag) < 0) {
         this.nameTags.push(tag);
-        this.enoviaEntities = this.searchByTagService.getEntities(tag.id, true);
-        this.enoviaEntities.subscribe(res => {
-          this.dataSource.data = res;
-        });
+        if (this.releasesForm.valid.valueOf()) {
+          this.startSearchTags();
+        } else {
+          this.releasesForm.markAsTouched();
+        }
       }
     }
   }
@@ -84,9 +131,11 @@ export class SearchByTagComponent implements OnInit {
     }
 
     console.log(this.nameTags);
+    const idTags: number[] = [];
+    this.nameTags.forEach(value => idTags.push(value.id));
 
-    this.enoviaEntities = this.enoviaEntities = this.searchByTagService.getEntities(tag.id, false);
-    this.enoviaEntities.subscribe(res => {
+    this.enoviaEntities$ = this.enoviaEntities$ = this.searchByTagService.getAllReleasesEntities(idTags);
+    this.enoviaEntities$.subscribe(res => {
       this.dataSource.data = res;
     });
   }

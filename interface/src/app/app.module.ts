@@ -1,5 +1,4 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -61,6 +60,7 @@ import { ProjectsComponent } from './components/main-board/projects/projects.com
 import {EventsServiceService} from './services/events-service.service';
 import { SearchByTagComponent } from './components/main-board/search-by-tag/search-by-tag.component';
 import { MatSortModule } from '@angular/material/sort';
+import {NgModule} from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -131,7 +131,6 @@ import { MatSortModule } from '@angular/material/sort';
   entryComponents: [GraphDialogComponent,
     CreateTagsDialogComponent,
     CreateTagsTypeDialogComponent,
-    TagPickerDialogComponent],
-  schemas: [NO_ERRORS_SCHEMA]
+    TagPickerDialogComponent]
 })
 export class AppModule { }
