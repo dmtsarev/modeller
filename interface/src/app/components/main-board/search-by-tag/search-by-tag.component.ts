@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {EnoviaEntity} from '../../../model/enovia-entity';
 import {ActivatedRoute} from '@angular/router';
@@ -7,21 +7,30 @@ import {ApiService} from '../../../core/services';
 import {Tag} from '../../../model/tag';
 import {SearchByTagService} from '../../../core/services/search-by-tag.service';
 import {
-  MatOptionSelectionChange,
+  MatOptionSelectionChange, MatSort,
   MatTableDataSource
 } from '@angular/material';
 import {map, scan, startWith} from 'rxjs/operators';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-search-by-tag',
   templateUrl: './search-by-tag.component.html',
-  styleUrls: ['./search-by-tag.component.css']
+  styleUrls: ['./search-by-tag.component.css'],
+  // animations: [
+  //   trigger('detailExpand', [
+  //     state('collapsed', style({height: '0px', minHeight: '0'})),
+  //     state('expanded', style({height: '*'})),
+  //     transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+  //   ]),
+  // ]
 })
 export class SearchByTagComponent implements OnInit {
 
+  // expandedElement: EnoviaEntity | null;
   tags$: Observable<Tag[]>;
   enoviaEntities$: Observable<EnoviaEntity[]>;
-  displayedColumns = ['Id', 'Name', 'Tags'];
+  displayedColumns = ['id', 'entityName', 'type', 'tags'];
   dataSource = new MatTableDataSource();
   selectable = true;
   removable = true;
@@ -33,12 +42,15 @@ export class SearchByTagComponent implements OnInit {
   myControl = new FormControl();
   releasesForm = new FormControl('', Validators.required);
 
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   constructor(private route: ActivatedRoute,
               private apiService: ApiService,
               private searchByTagService: SearchByTagService) {
   }
 
   ngOnInit() {
+    this.dataSource.sort = this.sort;
     this.tags$ = this.searchByTagService.getTags();
     this.releaseList$ = this.searchByTagService.getReleases();
 
@@ -138,5 +150,40 @@ export class SearchByTagComponent implements OnInit {
     this.enoviaEntities$.subscribe(res => {
       this.dataSource.data = res;
     });
+  }
+
+  getXlxs() {
+    if (this.releasesForm.valid.valueOf()) {
+      const idTags: number[] = [];
+      this.nameTags.forEach(value => idTags.push(value.id));
+      let dataBlob: Observable<Blob>;
+      if (this.releasesForm.value.indexOf(this.all) >= 0) {
+        dataBlob = this.searchByTagService.getExportXlsx(idTags);
+      } else {
+        dataBlob = this.searchByTagService.getReleasesExportXlsx(idTags, this.releasesForm.value);
+      }
+      dataBlob.subscribe( value => {
+        const blob = new Blob([value],
+          { type: 'application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(blob);
+          return;
+        }
+
+        const data = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = data;
+        link.download = 'entities.xlsx';
+        link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
+
+        setTimeout(function() {
+          window.URL.revokeObjectURL(data);
+          link.remove();
+        }, 100);
+      });
+    } else {
+      this.releasesForm.markAsTouched();
+    }
   }
 }

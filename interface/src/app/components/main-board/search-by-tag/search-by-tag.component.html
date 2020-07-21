@@ -1,42 +1,47 @@
 <div class="search-container">
-  <mat-form-field appearance="outline" class="example-mat-select">
-    <mat-label>Release</mat-label>
-    <mat-select [formControl]="releasesForm" multiple required>
-      <mat-option (click)="chooseAll()" [value]="all">All</mat-option>
-      <mat-option
-        *ngFor="let release of releaseList$ | async"
-        (click)="chooseOne()"
-        [value]="release">
-        {{release}}
-      </mat-option>
-      <mat-select-trigger>
-        {{(releasesForm.value ? ((releasesForm.value && releasesForm.value.indexOf(all) >= 0) ? 'All' : releasesForm.value[0]) : '')}}
-        <span *ngIf="releasesForm.value?.length > 1" class="example-additional-selection">
+  <button mat-icon-button aria-label="excel download" (click)="getXlxs()" class="example-mat-icon-button">
+    <img alt="excel download" class="excel-icon" src="{{'./assets/excel-icon.svg'}}">
+  </button>
+  <div class="fields-container">
+    <mat-form-field appearance="outline" class="example-mat-select">
+      <mat-label>Release</mat-label>
+      <mat-select [formControl]="releasesForm" multiple required>
+        <mat-option (click)="chooseAll()" [value]="all">All</mat-option>
+        <mat-option
+          *ngFor="let release of releaseList$ | async"
+          (click)="chooseOne()"
+          [value]="release">
+          {{release}}
+        </mat-option>
+        <mat-select-trigger>
+          {{(releasesForm.value ? ((releasesForm.value && releasesForm.value.indexOf(all) >= 0) ? 'All' : releasesForm.value[0]) : '')}}
+          <span *ngIf="releasesForm.value?.length > 1" class="example-additional-selection">
           (+{{releasesForm.value.length - 1}} {{releasesForm.value?.length === 2 ? 'other' : 'others'}})
         </span>
-      </mat-select-trigger>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="example-form-field">
-    <mat-label>Tag</mat-label>
-    <input tabindex="0"
-           placeholder="Select tag"
-           aria-label="Tag"
-           matInput
-           [formControl]="myControl"
-           [matAutocomplete]="auto"
-           (focus)="onFocus()">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option
-        *ngFor="let tag of tags$ | async "
-        [value]="tag.name"
-        (onSelectionChange)="callSomeFunction($event, tag);">
-        <mat-icon class="mat-icon notranslate material-icons"
-                  role="img" [ngStyle]="{'color':tag.type.color}">label</mat-icon>
-        <span>{{tag.name}}</span>
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+        </mat-select-trigger>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="example-form-field">
+      <mat-label>Tag</mat-label>
+      <input tabindex="0"
+             placeholder="Select tag"
+             aria-label="Tag"
+             matInput
+             [formControl]="myControl"
+             [matAutocomplete]="auto"
+             (focus)="onFocus()">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let tag of tags$ | async "
+          [value]="tag.name"
+          (onSelectionChange)="callSomeFunction($event, tag);">
+          <mat-icon class="mat-icon notranslate material-icons"
+                    role="img" [ngStyle]="{'color':tag.type.color}">label</mat-icon>
+          <span>{{tag.name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
   <div class="example-container">
     <mat-chip-list aria-label="Search by tag">
       <mat-chip
@@ -51,20 +56,24 @@
       </mat-chip>
     </mat-chip-list>
   </div>
-  <mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="Id">
-      <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
       <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
     </ng-container>
-    <ng-container matColumnDef="Name">
-      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+    <ng-container matColumnDef="entityName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
       <mat-cell *matCellDef="let row">
         <img alt="node type" class="mat-chip-margin" src="{{'./assets/' + row.type + '.png'}}">
         {{ row.entityName }}
       </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="Tags">
-      <mat-header-cell *matHeaderCellDef>Tags</mat-header-cell>
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.type }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="tags">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Tags</mat-header-cell>
       <mat-cell *matCellDef="let row">
         <mat-chip class="mat-chip-margin"
           *ngFor="let r of row.tags"
@@ -79,5 +88,66 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+
+<!--  <table mat-table-->
+<!--         [dataSource]="dataSource" multiTemplateDataRows-->
+<!--         class="mat-elevation-z8">-->
+<!--    <ng-container matColumnDef="Id">-->
+<!--      <th mat-header-cell *matHeaderCellDef>Id</th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.id}} </td>-->
+<!--    </ng-container>-->
+<!--    <ng-container matColumnDef="Name">-->
+<!--      <th mat-header-cell *matHeaderCellDef>Name</th>-->
+<!--      <td mat-cell *matCellDef="let element">-->
+<!--        <img alt="node type" class="mat-chip-margin" src="{{'./assets/' + element.type + '.png'}}">-->
+<!--        {{element.entityName}}-->
+<!--      </td>-->
+<!--    </ng-container>-->
+<!--    <ng-container matColumnDef="Type">-->
+<!--      <th mat-header-cell *matHeaderCellDef>Type</th>-->
+<!--      <td mat-cell *matCellDef="let element">{{element.type}}</td>-->
+<!--    </ng-container>-->
+<!--    <ng-container matColumnDef="Tags">-->
+<!--      <th mat-header-cell *matHeaderCellDef>Type</th>-->
+<!--      <td mat-cell *matCellDef="let element">-->
+<!--        <mat-chip class="mat-chip-margin"-->
+<!--                  *ngFor="let r of element.tags"-->
+<!--                  [selectable]="selectable"-->
+<!--                  [removable]="removable"-->
+<!--                  [ngStyle]="{'background':r.type.color}">-->
+<!--          {{r.name}}-->
+<!--        </mat-chip>-->
+<!--      </td>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Expanded Content Column - The detail row is made up of this one column that spans across all columns &ndash;&gt;-->
+<!--    <ng-container matColumnDef="expandedDetail">-->
+<!--      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">-->
+<!--        <div class="example-element-detail"-->
+<!--             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">-->
+<!--          <div>id: {{element.id}}<br>-->
+<!--            name: {{element.entityName}}<br>-->
+<!--            type: {{element.type}}<br>-->
+<!--            ematrixHtml: {{element.ematrixHTML}}<br>-->
+<!--            description: {{element.description}}<br>-->
+<!--            tags:<br>-->
+<!--            <div *ngFor="let r of element.tags">-->
+<!--              <p>id: {{r.id}}<br>-->
+<!--                name: {{r.name}}<br>-->
+<!--                description: {{r.description}}</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </td>-->
+<!--    </ng-container>-->
+
+<!--    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--    <tr mat-row *matRowDef="let element; columns: displayedColumns;"-->
+<!--        class="example-element-row"-->
+<!--        [class.example-expanded-row]="expandedElement === element"-->
+<!--        (click)="expandedElement = expandedElement === element ? null : element">-->
+<!--    </tr>-->
+<!--    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>-->
+<!--  </table>-->
 
 </div>

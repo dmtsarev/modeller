@@ -15,6 +15,11 @@ export class ApiService {
     return  throwError(error.error);
   }
 
+  getXlxs(path: string, params: HttpParams = new HttpParams()): Observable<any> {
+    return this.http.get(`${environment.api_url}${path}`, { params , responseType : 'blob'})
+      .pipe(catchError(ApiService.formatErrors));
+  }
+
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
     return this.http.get(`${environment.api_url}${path}`, { params })
       .pipe(catchError(ApiService.formatErrors));

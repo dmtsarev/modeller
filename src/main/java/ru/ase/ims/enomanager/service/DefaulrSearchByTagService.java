@@ -5,7 +5,9 @@ import ru.ase.ims.enomanager.model.EnoviaEntity;
 import ru.ase.ims.enomanager.model.Tag;
 import ru.ase.ims.enomanager.repository.EntityRepository;
 import ru.ase.ims.enomanager.repository.ReleaseRepository;
+import ru.ase.ims.enomanager.repository.TagsRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -13,21 +15,47 @@ import java.util.Set;
 public class DefaulrSearchByTagService implements SearchByTagService {
     private final EntityRepository entityRepository;
     private final ReleaseRepository releaseRepository;
+    private final TagsRepository tagRepository;
 
-    public DefaulrSearchByTagService(EntityRepository entityRepository, ReleaseRepository releaseRepository) {
+    public DefaulrSearchByTagService(EntityRepository entityRepository, ReleaseRepository releaseRepository, TagsRepository tagRepository) {
         this.entityRepository = entityRepository;
         this.releaseRepository = releaseRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
     public List<EnoviaEntity> getEntityList(Set<Long> tags) {
-        //return entityRepository.findDistinctByTagsNameIn(tags);
-        return entityRepository.findDistinctByTagsIdIn(tags);
+        List<EnoviaEntity> enoviaEntities = entityRepository.findDistinctByTagsIdIn(tags);
+        return getEnoviaEntities(tags, enoviaEntities);
     }
 
     @Override
     public List<EnoviaEntity> getEntityListByReleases(Set<Long> tags, Set<Long> releases) {
-        return entityRepository.findDistinctByTagsIdInAndReleaseIdIn(tags, releases);
+        List<EnoviaEntity> enoviaEntities = entityRepository.findDistinctByTagsIdInAndReleaseIdIn(tags, releases);
+        return getEnoviaEntities(tags, enoviaEntities);
+    }
+
+    private List<EnoviaEntity> getEnoviaEntities(Set<Long> tags, List<EnoviaEntity> enoviaEntities) {
+        ArrayList<EnoviaEntity> result = new ArrayList<>();
+
+        for (EnoviaEntity e : enoviaEntities){
+            if(e.getTags().size() >= tags.size()){
+                Set<Tag> eTags = e.getTags();
+                int count = 0;
+                for (Tag eTag : eTags) {
+                    for (Long selectedTagId : tags){
+                        if(selectedTagId.equals(eTag.getId())) {
+                            count++;
+                        }
+                    }
+                }
+                if(count == tags.size()){
+                    result.add(e);
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override

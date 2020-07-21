@@ -16,8 +16,8 @@ export class SearchByTagService {
   }
   getAllReleasesEntities(tags: number[]): Observable<EnoviaEntity[]> {
     console.log( tags.toString());
-    const params = new HttpParams().set('tags', tags.toString());
-    return this.apiService.get('/search/entities', params);
+    const param = new HttpParams().set('tags', tags.toString());
+    return this.apiService.get('/search/entities', param);
   }
   getEntities(tags: number[], releases: string[]): Observable<EnoviaEntity[]> {
     const params = new HttpParams().set('tags', tags.toString()).set('releases', releases.toString());
@@ -25,5 +25,13 @@ export class SearchByTagService {
   }
   getReleases(): Observable<string[]> {
     return this.apiService.get('/search/releases');
+  }
+  getExportXlsx(tags: number[]): Observable<Blob> {
+    const param = new HttpParams().set('tags', tags.toString());
+    return this.apiService.getXlxs('/search/export/xlsx', param);
+  }
+  getReleasesExportXlsx(tags: number[], release: string[]): Observable<Blob> {
+    const params = new HttpParams().set('tags', tags.toString()).set('releases', release.toString());
+    return this.apiService.getXlxs('/releases/export/xlsx', params);
   }
 }

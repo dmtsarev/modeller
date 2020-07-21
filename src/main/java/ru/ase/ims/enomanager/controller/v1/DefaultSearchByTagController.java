@@ -6,20 +6,18 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ase.ims.enomanager.model.EnoviaEntity;
 import ru.ase.ims.enomanager.model.Tag;
-import ru.ase.ims.enomanager.service.DefaultReleaseManager;
-import ru.ase.ims.enomanager.service.DefaultTagService;
-import ru.ase.ims.enomanager.service.EntityService;
-import ru.ase.ims.enomanager.service.SearchByTagService;
+import ru.ase.ims.enomanager.service.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "${application.v1API}/search")
@@ -37,7 +35,7 @@ public class DefaultSearchByTagController {
     })
     @GetMapping(path = "/entities", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<EnoviaEntity> getEnoviaEntities(@RequestParam(name = "tags") Set<Long> tags) {
-        return  searchByTagService.getEntityList(tags);
+        return searchByTagService.getEntityList(tags);
     }
 
     @ApiOperation(value = "Returns list of entities for specified tags and releases", response = List.class)
@@ -46,9 +44,9 @@ public class DefaultSearchByTagController {
             @ApiResponse(code = 404, message = "Release not found"),
     })
     @GetMapping(path = "/releases/entities", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<EnoviaEntity> getEnoviaEntities(@RequestParam(name = "tags") Set<Long> tags,
+    public List<EnoviaEntity> getEnoviaEntitiesByReleases(@RequestParam(name = "tags") Set<Long> tags,
                                                 @RequestParam(name = "releases") Set<Long> releases) {
-        return  searchByTagService.getEntityListByReleases(tags, releases);
+        return searchByTagService.getEntityListByReleases(tags, releases);
     }
 
     @ApiOperation(value = "Returns list of tags", response = Tag.class)
@@ -73,5 +71,34 @@ public class DefaultSearchByTagController {
     @GetMapping(path="/releases", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Long> releases() {
         return searchByTagService.getReleaseList();
+    }
+
+    @ApiOperation(value = "Returns .xlsx file", response = InputStreamResource.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+    })
+    @GetMapping(path="/export/xlsx", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<InputStreamResource> exportEntitiesXlsx(@RequestParam(name = "tags") Set<Long> tags) throws IOException {
+        List<EnoviaEntity> enoviaEntities = searchByTagService.getEntityList(tags);
+        ByteArrayInputStream bais = ExportEntitiesService.entitiesExcelReport(enoviaEntities);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=entities.xlsx");
+        return ResponseEntity.ok().headers(headers).body(new InputStreamResource(bais));
+
+    }
+
+    @ApiOperation(value = "Returns .xlsx file", response = InputStreamResource.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+    })
+    @GetMapping(path="/releases/export/xlsx", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<InputStreamResource> exportEntitiesXlsx(@RequestParam(name = "tags") Set<Long> tags,
+                                                                  @RequestParam(name = "releases") Set<Long> releases) throws IOException {
+        List<EnoviaEntity> enoviaEntities = searchByTagService.getEntityListByReleases(tags, releases);
+        ByteArrayInputStream bais = ExportEntitiesService.entitiesExcelReport(enoviaEntities);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=entities.xlsx");
+        return ResponseEntity.ok().headers(headers).body(new InputStreamResource(bais));
+
     }
 }
