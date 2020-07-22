@@ -17,6 +17,12 @@ export class EntityService {
 
     return this.apiService.get('/entity', params);
   }
+  getRoleEntities(releaseId: number, searchWord: string): Observable<EnoviaEntity[]> {
+    const params = new HttpParams().set('releaseId', releaseId.toString())
+      .set('searchWord', searchWord);
+
+    return this.apiService.get('/entity/roles', params);
+  }
   getEntity(entityId: number): Observable<EnoviaEntity>  {
     return this.apiService.get('/entity/' + entityId);
   }

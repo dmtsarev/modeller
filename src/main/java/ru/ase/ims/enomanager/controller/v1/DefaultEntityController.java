@@ -13,6 +13,7 @@ import ru.ase.ims.enomanager.model.EnoviaEntity;
 import ru.ase.ims.enomanager.model.Release;
 import ru.ase.ims.enomanager.model.graph.EntityGraph;
 import ru.ase.ims.enomanager.service.EntityService;
+import ru.ase.ims.enomanager.service.RoleEntityService;
 import ru.ase.ims.enomanager.service.xml.XMLReader;
 
 import javax.transaction.Transactional;
@@ -28,6 +29,7 @@ public class DefaultEntityController {
     private static final String HTML_TYPE = "html";
     private static final String JSON_TYPE = "json";
     private final EntityService entityService;
+    private final RoleEntityService roleEntityService;
     private final XMLReader xmlReader;
 
     @ApiOperation(value = "Returns list of entities for specified release", response = List.class)
@@ -40,6 +42,19 @@ public class DefaultEntityController {
                                                 @RequestParam(name = "type", required = false) String type,
                                                 @RequestParam(name = "searchWord", required = false) String searchWord) {
         return  entityService.getEntityList(releaseId, type, searchWord);
+    }
+
+    @ApiOperation(value = "Returns tree of role entities for specified release", response = ResponseEntity.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "Release not found"),
+    })
+    @GetMapping(path = "/roles", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @Transactional
+    public ResponseEntity getEnoviaRoleEntities(@RequestParam(name = "releaseId") Long releaseId,
+                                                @RequestParam(name = "searchWord", required = false) String searchWord) {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                .body(roleEntityService.getRoleEntityTree(releaseId, searchWord));
     }
 
     @ApiOperation(value = "Updates entity", response = EnoviaEntity.class)
