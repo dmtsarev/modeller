@@ -59,8 +59,11 @@ import { BreadCrumbsComponent } from './components/common/bread-crumbs/bread-cru
 import { ProjectsComponent } from './components/main-board/projects/projects.component';
 import {EventsServiceService} from './services/events-service.service';
 import { SearchByTagComponent } from './components/main-board/search-by-tag/search-by-tag.component';
+import { EntityDetailsXmlComponent } from './components/main-board/search-by-tag/entity-details-xml/entity-details-xml.component';
 import { MatSortModule } from '@angular/material/sort';
 import {NgModule} from '@angular/core';
+import { FoundDataTableComponent } from './components/main-board/search-by-tag/found-data-table/found-data-table.component';
+import { ExportDataComponent } from './components/main-board/search-by-tag/export-data/export-data.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +92,9 @@ import {NgModule} from '@angular/core';
     BreadCrumbsComponent,
     ProjectsComponent,
     SearchByTagComponent,
+    EntityDetailsXmlComponent,
+    FoundDataTableComponent,
+    ExportDataComponent,
   ],
   imports: [
     BrowserModule,
