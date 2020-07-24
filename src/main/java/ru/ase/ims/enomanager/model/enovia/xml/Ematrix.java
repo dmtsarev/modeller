@@ -15,6 +15,10 @@ public class Ematrix {
     @JsonIgnore
     private Type type;
 
+    @XmlElement(name = "program")
+    @JsonIgnore
+    private Program program;
+
     @XmlElement(name = "interfaceType")
     private InterfaceType interfaceType;
 
@@ -31,6 +35,7 @@ public class Ematrix {
         this.creationProperties = ematrix.creationProperties;
         this.interfaceType = ematrix.interfaceType;
         this.relationshipDef = ematrix.relationshipDef;
+        this.program = ematrix.program;
     }
 
     public Ematrix() {}
@@ -63,6 +68,10 @@ public class Ematrix {
         return type;
     }
 
+    public Program getProgram() {
+        return program;
+    }
+
     public void setType(Type type) {
         this.type = type;
     }
@@ -83,6 +92,7 @@ public class Ematrix {
                 ", interfaceType=" + interfaceType +
                 ", attributeDef=" + attributeDef +
                 ", relationshipDef=" + relationshipDef +
+                ", program=" + program +
                 '}';
     }
 }
