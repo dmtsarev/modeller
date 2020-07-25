@@ -32,6 +32,6 @@ export class SearchByTagService {
   }
   getReleasesExportXlsx(tags: number[], release: string[]): Observable<Blob> {
     const params = new HttpParams().set('tags', tags.toString()).set('releases', release.toString());
-    return this.apiService.getXlxs('/releases/export/xlsx', params);
+    return this.apiService.getXlxs('/search/releases/export/xlsx', params);
   }
 }

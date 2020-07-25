@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:8080/enomanager/api/v1',
-  auth_url: 'http://localhost:8080/enomanager'
+  api_url: 'http://localhost:8080/api/v1',
+  auth_url: 'http://localhost:8080'
 };
 
 /*

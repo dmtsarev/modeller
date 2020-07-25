@@ -1,5 +1,6 @@
 package ru.ase.ims.enomanager.service.git;
 
+import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -7,6 +8,7 @@ import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.springframework.context.annotation.Scope;
@@ -20,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -128,6 +131,46 @@ public class SimpleGitClient implements GitClient {
     public Ref checkoutBranch(String branchName) throws GitAPIException {
         return git.checkout().setName(branchName).call();
     }
+
+    @Override
+    public ArrayList<String> getNonExistentRemoteBranchList() throws GitAPIException {
+        Collection<Ref> refList = Git.lsRemoteRepository().setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password)).setRemote(this.uri).call();
+        List<String> branchList = getLocalBranchList();
+        ArrayList<String> createBranchList = new ArrayList<>();
+        for (Ref ref: refList){
+            var name = ref.getName();
+            boolean flag = true;
+            if(!name.equals("HEAD")){
+                for (String branch : branchList){
+                    if(name.equals(branch)){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag){
+                    createBranchList.add(name);
+                }
+            }
+        }
+        return createBranchList;
+    }
+
+    @Override
+    public Ref createRemoteBranch(String branchName) throws GitAPIException {
+        return git.checkout().
+                setCreateBranch(true).
+                setName(branchName).
+                setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).
+                setStartPoint("origin/" + branchName).
+                call();
+    }
+
+    @Override
+    public FetchResult fetchOrigin() throws GitAPIException {
+        return git.fetch().setRemote("origin").call();
+    }
+
+
     private class SimpleProgressMonitor implements ProgressMonitor {
 
         @Override

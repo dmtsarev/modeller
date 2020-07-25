@@ -5,7 +5,6 @@ import ru.ase.ims.enomanager.model.EnoviaEntity;
 import ru.ase.ims.enomanager.model.Tag;
 import ru.ase.ims.enomanager.repository.EntityRepository;
 import ru.ase.ims.enomanager.repository.ReleaseRepository;
-import ru.ase.ims.enomanager.repository.TagsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +14,10 @@ import java.util.Set;
 public class DefaulrSearchByTagService implements SearchByTagService {
     private final EntityRepository entityRepository;
     private final ReleaseRepository releaseRepository;
-    private final TagsRepository tagRepository;
 
-    public DefaulrSearchByTagService(EntityRepository entityRepository, ReleaseRepository releaseRepository, TagsRepository tagRepository) {
+    public DefaulrSearchByTagService(EntityRepository entityRepository, ReleaseRepository releaseRepository) {
         this.entityRepository = entityRepository;
         this.releaseRepository = releaseRepository;
-        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -33,6 +30,11 @@ public class DefaulrSearchByTagService implements SearchByTagService {
     public List<EnoviaEntity> getEntityListByReleases(Set<Long> tags, Set<Long> releases) {
         List<EnoviaEntity> enoviaEntities = entityRepository.findDistinctByTagsIdInAndReleaseIdIn(tags, releases);
         return getEnoviaEntities(tags, enoviaEntities);
+    }
+
+    @Override
+    public List<Long> getReleaseList() {
+        return releaseRepository.findId();
     }
 
     private List<EnoviaEntity> getEnoviaEntities(Set<Long> tags, List<EnoviaEntity> enoviaEntities) {
@@ -56,10 +58,5 @@ public class DefaulrSearchByTagService implements SearchByTagService {
         }
 
         return result;
-    }
-
-    @Override
-    public List<Long> getReleaseList() {
-        return releaseRepository.findId();
     }
 }

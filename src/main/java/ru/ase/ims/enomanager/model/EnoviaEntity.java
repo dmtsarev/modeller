@@ -121,32 +121,4 @@ public class EnoviaEntity {
                 ", fileName='" + fileName + '\'' +
                 '}';
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getEntityName() {
-        return entityName;
-    }
-
-    public Release getRelease() {
-        return release;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public Set<Tag> getTags() {
-        return tags;
-    }
 }

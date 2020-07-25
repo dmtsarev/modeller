@@ -14,7 +14,7 @@ import java.util.StringJoiner;
 
 public class ExportEntitiesService {
     public static ByteArrayInputStream entitiesExcelReport(List<EnoviaEntity> entities) throws IOException {
-        String[] columns = {"id", "name", "type", "tags"};
+        String[] columns = {"id", "name", "type", "release", "tags"};
         try (Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream out = new ByteArrayOutputStream()){
 
@@ -43,11 +43,12 @@ public class ExportEntitiesService {
                 row.createCell(0).setCellValue(enoviaEntity.getId());
                 row.createCell(1).setCellValue(enoviaEntity.getEntityName());
                 row.createCell(2).setCellValue(enoviaEntity.getType());
-                row.createCell(3).setCellValue(stringJoiner.toString());
+                row.createCell(3).setCellValue(enoviaEntity.getRelease().getId());
+                row.createCell(4).setCellValue(stringJoiner.toString());
             }
 
             HSSFFormulaEvaluator.evaluateAllFormulaCells(workbook);
-            for (int i = 0; i < 4; i++){
+            for (int i = 0; i < 5; i++){
                 sheet.autoSizeColumn(i);
             }
 

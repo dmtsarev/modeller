@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
+import ru.ase.ims.enomanager.model.ProjectStatus;
 import ru.ase.ims.enomanager.model.Release;
+import ru.ase.ims.enomanager.repository.ProjectRepository;
 import ru.ase.ims.enomanager.repository.ReleaseRepository;
 import ru.ase.ims.enomanager.service.git.GitManager;
 
@@ -19,6 +21,7 @@ public class DefaultReleaseManager implements ReleaseManager {
     private final ReleaseRepository releaseRepository;
     private final GitManager gitManager;
     private final EntityService entityService;
+    private final ProjectRepository projectRepository;
 
     @Override
     public Release createRelease(Release release) {
@@ -53,7 +56,37 @@ public class DefaultReleaseManager implements ReleaseManager {
 
     @Override
     public List<Release> getAllReleases(Long projectId) {
+        createReleasesIfAny(projectId);
         return releaseRepository.findAllByProjectId(projectId);
+    }
+
+    private void createReleasesIfAny(Long projectId){
+        this.projectRepository.findById(projectId).map(project -> {
+            try {
+                var gitClient = this.gitManager.getGitClient(project.getGitRepository().getId());
+                var remoteBranchList = gitClient.getNonExistentRemoteBranchList();
+                if (!remoteBranchList.isEmpty()){
+                    gitClient.fetchOrigin();
+                    for (String remoteBranch : remoteBranchList){
+                        String nameRemoteBranch = remoteBranch.substring(11);
+                        gitClient.createRemoteBranch(nameRemoteBranch);
+                    }
+                    List<String> localBranchList = gitClient.getLocalBranchList();
+                    for (String localBranch : localBranchList){
+                        if(releaseRepository.findByBranchName(localBranch).isEmpty()){
+                            createRelease(new Release(0L, "", localBranch, localBranch, localBranch, project));
+                            project.setStatus(ProjectStatus.CREATED);
+                            projectRepository.save(project);
+                        }
+                    }
+                }
+            } catch (GitAPIException e) {
+                e.printStackTrace();
+                project.setStatus(ProjectStatus.ERROR);
+                projectRepository.save(project);
+            }
+            return null;
+        });
     }
 
 }

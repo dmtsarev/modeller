@@ -70,7 +70,7 @@ export class SearchByTagComponent implements OnInit {
   chooseOne() {
     const values = this.releasesForm.value;
     if (values.indexOf(this.all) >= 0) {
-      values.splice(values.indexOf(this.all, 1));
+      values.splice(values.indexOf(this.all), 1);
       this.releasesForm.patchValue(values);
     } else {
       this.releaseList$.toPromise().then(p => {
