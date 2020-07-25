@@ -8,6 +8,7 @@ import ru.ase.ims.enomanager.model.ProjectStatus;
 import ru.ase.ims.enomanager.model.Release;
 import ru.ase.ims.enomanager.repository.ProjectRepository;
 import ru.ase.ims.enomanager.repository.ReleaseRepository;
+import ru.ase.ims.enomanager.service.git.GitClient;
 import ru.ase.ims.enomanager.service.git.GitManager;
 
 import java.util.List;
@@ -63,20 +64,22 @@ public class DefaultReleaseManager implements ReleaseManager {
     private void createReleasesIfAny(Long projectId){
         this.projectRepository.findById(projectId).map(project -> {
             try {
-                var gitClient = this.gitManager.getGitClient(project.getGitRepository().getId());
-                var remoteBranchList = gitClient.getNonExistentRemoteBranchList();
-                if (!remoteBranchList.isEmpty()){
-                    gitClient.fetchOrigin();
-                    for (String remoteBranch : remoteBranchList){
-                        String nameRemoteBranch = remoteBranch.substring(11);
-                        gitClient.createRemoteBranch(nameRemoteBranch);
-                    }
-                    List<String> localBranchList = gitClient.getLocalBranchList();
-                    for (String localBranch : localBranchList){
-                        if(releaseRepository.findByBranchName(localBranch).isEmpty()){
-                            createRelease(new Release(0L, "", localBranch, localBranch, localBranch, project));
-                            project.setStatus(ProjectStatus.CREATED);
-                            projectRepository.save(project);
+                synchronized (GitClient.class){
+                    var gitClient = this.gitManager.getGitClient(project.getGitRepository().getId());
+                    var remoteBranchList = gitClient.getNonExistentRemoteBranchList();
+                    if (!remoteBranchList.isEmpty()){
+                        gitClient.fetchOrigin();
+                        for (String remoteBranch : remoteBranchList){
+                            String nameRemoteBranch = remoteBranch.substring(11);
+                            gitClient.createRemoteBranch(nameRemoteBranch);
+                        }
+                        List<String> localBranchList = gitClient.getLocalBranchList();
+                        for (String localBranch : localBranchList){
+                            if(releaseRepository.findByBranchName(localBranch).isEmpty()){
+                                createRelease(new Release(0L, "", localBranch, localBranch, localBranch, project));
+                                project.setStatus(ProjectStatus.CREATED);
+                                projectRepository.save(project);
+                            }
                         }
                     }
                 }

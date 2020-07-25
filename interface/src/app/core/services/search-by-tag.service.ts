@@ -19,6 +19,9 @@ export class SearchByTagService {
     const param = new HttpParams().set('tags', tags.toString());
     return this.apiService.get('/search/entities', param);
   }
+  getEntity(entityId: number): Observable<EnoviaEntity>  {
+    return this.apiService.get('/search/entity/' + entityId);
+  }
   getEntities(tags: number[], releases: string[]): Observable<EnoviaEntity[]> {
     const params = new HttpParams().set('tags', tags.toString()).set('releases', releases.toString());
     return this.apiService.get('/search/releases/entities', params);

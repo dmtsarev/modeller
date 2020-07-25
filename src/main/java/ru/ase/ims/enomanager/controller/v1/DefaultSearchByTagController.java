@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.ase.ims.enomanager.model.EnoviaEntity;
 import ru.ase.ims.enomanager.model.Tag;
 import ru.ase.ims.enomanager.service.*;
+import ru.ase.ims.enomanager.service.xml.XMLReader;
 
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
@@ -27,6 +30,7 @@ import java.util.*;
 public class DefaultSearchByTagController {
     private final SearchByTagService searchByTagService;
     private final DefaultTagService tagService;
+    private final XMLReader xmlReader;
 
     @ApiOperation(value = "Returns list of entities for specified tags", response = List.class)
     @ApiResponses(value = {
@@ -100,5 +104,17 @@ public class DefaultSearchByTagController {
         headers.add("Content-Disposition", "inline; filename=entities.xlsx");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(bais));
 
+    }
+
+    @ApiOperation(value = "Returns Enovia entity", response = EnoviaEntity.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 404, message = "Entity not found")
+    })
+    @GetMapping(path = "/entity/{entityId}", produces = {MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @Transactional
+    public ResponseEntity getEntity(@PathVariable(name = "entityId") Long entityId) throws IOException, GitAPIException {
+        EnoviaEntity enoviaEntity = searchByTagService.getEntity(entityId);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(enoviaEntity);
     }
 }

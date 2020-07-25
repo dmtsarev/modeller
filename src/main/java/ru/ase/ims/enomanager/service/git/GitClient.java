@@ -29,4 +29,5 @@ public interface GitClient extends RepositoryEventEmmiter {
     ArrayList<String> getNonExistentRemoteBranchList() throws GitAPIException;
     Ref createRemoteBranch(String branchName) throws GitAPIException;
     FetchResult fetchOrigin() throws GitAPIException;
+    TreeWalk getBranchTreeByName(String branchName, String fileName) throws IOException;
 }

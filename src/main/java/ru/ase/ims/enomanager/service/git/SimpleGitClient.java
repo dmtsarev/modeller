@@ -4,13 +4,16 @@ import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.FetchResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -170,6 +173,17 @@ public class SimpleGitClient implements GitClient {
         return git.fetch().setRemote("origin").call();
     }
 
+    @Override
+    public TreeWalk getBranchTreeByName(String branchName, String fileName) throws IOException {
+        ObjectId ref = repository.resolve(branchName);
+        RevWalk revWalk = new RevWalk(repository);
+        RevCommit revCommit = revWalk.parseCommit(ref);
+        TreeWalk treeWalk = new TreeWalk(repository);
+        treeWalk.addTree(revCommit.getTree());
+        treeWalk.setRecursive(true);
+        treeWalk.setFilter(PathFilter.create(fileName));
+        return treeWalk;
+    }
 
     private class SimpleProgressMonitor implements ProgressMonitor {
 

@@ -4,6 +4,7 @@ import {EnoviaEntity} from '../../../../model/enovia-entity';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {EntityService} from '../../../../core/services/entity.service';
 import {MatSort, MatTableDataSource} from '@angular/material';
+import {SearchByTagService} from '../../../../core/services/search-by-tag.service';
 
 @Component({
   selector: 'app-found-data-table',
@@ -27,7 +28,7 @@ export class FoundDataTableComponent implements OnInit {
   @Input() dataSource: MatTableDataSource<EnoviaEntity[]>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private entityService: EntityService) { }
+  constructor(private searchByTagService: SearchByTagService) { }
 
   ngOnInit() {
     this.dataSource.sort = this.sort;
@@ -35,7 +36,7 @@ export class FoundDataTableComponent implements OnInit {
 
   showElement(nodeId: number, expandedElement) {
     if (expandedElement != null) {
-      this.enoviaEntity$ = this.entityService.getEntity(nodeId);
+      this.enoviaEntity$ = this.searchByTagService.getEntity(nodeId);
     }
   }
 }
