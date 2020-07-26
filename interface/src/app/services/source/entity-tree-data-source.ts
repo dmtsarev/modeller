@@ -27,15 +27,15 @@ export class EntityTreeDataSource {
 
   constructor(private entityService: EntityService, private releaseId: number) {
     this.transformFunction = (node: EnoviaEntity, level: number) => {
-      return new EnoviaEntityFlatNode(node.id, node.type, node.entityName, level);
+      return new EnoviaEntityFlatNode(node.id, node.type, node.entityName, level, !!node.child && node.child.length > 0);
     };
     this.treeFlattener = new MatTreeFlattener<EnoviaEntity, EnoviaEntityFlatNode>(this.transformFunction,
         node => node.level,
       node => node.expandable,
-      null);
+      node => node.child);
     this.flatTreeDataSource = new MatTreeFlatDataSource<EnoviaEntity, EnoviaEntityFlatNode>(this.treeControl,
       this.treeFlattener);
-    this.data = this.rootNodes.map(name => new EnoviaEntityFlatNode(0, 'type', name, 0, true));
+    this.data = this.rootNodes.map(name => new EnoviaEntityFlatNode(0, name, name, 0, true));
   }
 
   handleTreeControl(change: SelectionChange<EnoviaEntityFlatNode>) {
@@ -50,21 +50,36 @@ export class EntityTreeDataSource {
   toggleNode(node: EnoviaEntityFlatNode, expand: boolean) {
     const index = this.data.indexOf(node);
     node.isLoading = true;
+
     if (expand) {
-      this.entityService.getEntities(this.releaseId, node.name, this.searchWord).toPromise().then(items => {
-        const tmpItems = items.map(item => this.transformFunction(item, 1));
-        this.data.splice(index + 1, 0, ...tmpItems);
-        node.isLoading = false;
-        this.enoviaEntitySubject.next(this.data);
-      });
+      console.log(node.type);
+      if (node.type != 'role') {
+        this.entityService.getEntities(this.releaseId, node.type, this.searchWord).toPromise().then(items => {
+          const tmpItems = items.map(item => this.transformFunction(item, 1));
+          this.data.splice(index + 1, 0, ...tmpItems);
+          node.isLoading = false;
+          this.enoviaEntitySubject.next(this.data);
+        });
+      } else {
+        if (node.name == 'role') {
+          this.entityService.getRoleEntities(this.releaseId, this.searchWord).toPromise().then(items => {
+            const tmpItems = items.map(item => this.transformFunction(item, node.level + 1));
+            this.data.splice(index + 1, 0, ...tmpItems);
+            node.isLoading = false;
+            this.enoviaEntitySubject.next(this.data);
+          });
+        } else {
+
+        }
+      }
     } else {
       let count = 0;
       for (let i = index + 1; i < this.data.length
-      && this.data[i].level > node.level; i++, count++) {}
+        && this.data[i].level > node.level; i++, count++) {}
       this.data.splice(index + 1, count);
       node.isLoading = false;
+      this.enoviaEntitySubject.next(this.data);
     }
-    this.enoviaEntitySubject.next(this.data);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<EnoviaEntityFlatNode[]> {

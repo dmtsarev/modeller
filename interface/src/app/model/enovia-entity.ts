@@ -7,4 +7,5 @@ export interface EnoviaEntity {
   description: string;
   ematrixHTML: string;
   tags: Tag[];
+  child?: EnoviaEntity[];
 }

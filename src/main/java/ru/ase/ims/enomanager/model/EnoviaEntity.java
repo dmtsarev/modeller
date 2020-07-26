@@ -7,9 +7,7 @@ import ru.ase.ims.enomanager.model.enovia.xml.Ematrix;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "entities")
@@ -79,6 +77,12 @@ public class EnoviaEntity {
     @Getter
     private Set<Tag> tags = new HashSet<>();
 
+    @Transient
+    @JsonInclude
+    @Getter
+    @Setter
+    private List<EnoviaEntity> child = new ArrayList<>();
+
     public EnoviaEntity(String fileName, Release release) {
         this.fileName = fileName;
         this.release = release;
@@ -120,5 +124,18 @@ public class EnoviaEntity {
                 ", ematrixHTML='" + ematrixHTML + '\'' +
                 ", fileName='" + fileName + '\'' +
                 '}';
+    }
+
+    public EnoviaEntity addChild(EnoviaEntity child) {
+        this.child.add(child);
+        return child;
+    }
+
+    public void addChildren(List<EnoviaEntity> children) {
+        this.child.addAll(children);
+    }
+
+    public List<EnoviaEntity> getChild() {
+        return child;
     }
 }
