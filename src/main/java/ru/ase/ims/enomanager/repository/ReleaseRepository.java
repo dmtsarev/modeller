@@ -13,4 +13,5 @@ public interface ReleaseRepository extends JpaRepository<Release, Long> {
 
     @Query("SELECT id FROM Release")
     List<Long> findId();
+    Release findFirstByOrderByIdDesc();
 }

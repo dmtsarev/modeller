@@ -50,12 +50,21 @@ public class Tag {
     @Setter
     private TagType type;
 
+    public Tag(Long id, String name, String description, TagType type){
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Tag{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", enoviaEntities='" + enoviaEntities + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }
