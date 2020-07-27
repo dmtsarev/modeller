@@ -13,7 +13,6 @@ import ru.ase.ims.enomanager.model.EnoviaEntity;
 import ru.ase.ims.enomanager.model.Release;
 import ru.ase.ims.enomanager.model.graph.EntityGraph;
 import ru.ase.ims.enomanager.service.EntityService;
-import ru.ase.ims.enomanager.service.DefaultRoleEntityService;
 import ru.ase.ims.enomanager.service.RoleEntityService;
 import ru.ase.ims.enomanager.service.xml.XMLReader;
 
@@ -53,9 +52,10 @@ public class DefaultEntityController {
     @GetMapping(path = "/roles", produces = {MediaType.APPLICATION_JSON_VALUE})
     @Transactional
     public ResponseEntity getEnoviaRoleEntities(@RequestParam(name = "releaseId") Long releaseId,
+                                                @RequestParam(name = "name") String name,
                                                 @RequestParam(name = "searchWord", required = false) String searchWord) {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                .body(roleEntityService.getRoleEntityTree(releaseId, searchWord));
+                .body(roleEntityService.getRoleEntityTree(releaseId, name, searchWord));
     }
 
     @ApiOperation(value = "Updates entity", response = EnoviaEntity.class)

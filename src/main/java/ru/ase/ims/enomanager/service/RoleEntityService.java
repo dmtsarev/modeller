@@ -5,5 +5,5 @@ import ru.ase.ims.enomanager.model.EnoviaEntity;
 import java.util.List;
 
 public interface RoleEntityService {
-    List<EnoviaEntity> getRoleEntityTree(Long releaseId, String searchWord);
+    List<EnoviaEntity> getRoleEntityTree(Long releaseId, String name, String searchWord);
 }

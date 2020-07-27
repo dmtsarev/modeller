@@ -2,12 +2,11 @@ package ru.ase.ims.enomanager.service;
 
 import org.springframework.stereotype.Service;
 import ru.ase.ims.enomanager.model.EnoviaEntity;
-import ru.ase.ims.enomanager.model.Project;
-import ru.ase.ims.enomanager.model.Release;
 import ru.ase.ims.enomanager.model.enovia.xml.ParentRole;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class DefaultRoleEntityService implements RoleEntityService {
@@ -19,64 +18,55 @@ public class DefaultRoleEntityService implements RoleEntityService {
     }
 
     @Override
-    public List<EnoviaEntity> getRoleEntityTree(Long releaseId, String searchWord) {
-
-//        List<EnoviaEntity> roleEntities = defaultEntityService.getEntityList(releaseId, "role", searchWord);
-//        TreeNode<EnoviaEntity> roleRefsTreeRoot = new TreeNode<EnoviaEntity>(new EnoviaEntity("root", "role", "root", null));
-//
-//        for (int i = 0; i < maxTreeDeepness; i++) {
-//            List<EnoviaEntity> tmpToRemove = new ArrayList<>();
-//            roleEntities.forEach(role -> {
-//                ParentRole parentRole = role.getEmatrix().getRole().getParentRole();
-//
-//                if (parentRole != null) {
-//                    List<String> roleRefNameList = parentRole.getRoleRef();
-//                    roleRefNameList.forEach(roleRefItemName -> {
-//                        EnoviaEntity child = findRoleChildByName(roleRefsTreeRoot, roleRefItemName);
-//                        Objects.requireNonNullElse(child, roleRefsTreeRoot).addChild(new TreeNode<EnoviaEntity>(role));
-//                    });
-//                } else {
-//                    roleRefsTreeRoot.addChild(new TreeNode<EnoviaEntity>(role));
-//                }
-//
-//                tmpToRemove.add(role);
-//            });
-//
-//            roleEntities.removeAll(tmpToRemove);
-//        }
-//
-//        return roleRefsTreeRoot.getChild();
-
+    public List<EnoviaEntity> getRoleEntityTree(Long releaseId, String name, String searchWord) {
         List<EnoviaEntity> roleEntities = defaultEntityService.getEntityList(releaseId, "role", searchWord);
-        EnoviaEntity newRoleEntitiesRoot = new EnoviaEntity("roleRoot", new Release(releaseId, "", "", "", "", new Project()));
-        newRoleEntitiesRoot.addChildren(roleEntities);
 
-        roleEntities.forEach(role -> {
+        roleEntities.forEach(item -> item.setChild(new ArrayList<>()));
+
+        for (Iterator<EnoviaEntity> it = roleEntities.iterator(); it.hasNext(); ) {
+            EnoviaEntity role = it.next();
             ParentRole parentRole = role.getEmatrix().getRole().getParentRole();
 
             if (parentRole != null) {
-                List<String> roleRefNameList = parentRole.getRoleRef();
-                roleRefNameList.forEach(roleRefItemName -> {
-                    EnoviaEntity child = findRoleChildByName(newRoleEntitiesRoot, roleRefItemName);
+                boolean block = false;
+                List<String> roleRefItemNameList = parentRole.getRoleRef();
+
+                for (String roleRefItemName : roleRefItemNameList) {
+                    EnoviaEntity child = findRoleChildByName(roleEntities, roleRefItemName);
+
                     if (child != null) {
                         child.addChild(role);
-                        newRoleEntitiesRoot.getChild().remove(role);
+                        if (!block) {
+                            it.remove();
+                            block = true;
+                        }
                     }
-//                    Objects.requireNonNullElse(child, newRoleEntitiesRoot).addChild(role);
-                });
+                }
             }
-        });
+        }
 
-        return newRoleEntitiesRoot.getChild();
+        if (name.equals("role")) {
+            return roleEntities;
+        }
+
+        EnoviaEntity child = findRoleChildByName(roleEntities, name);
+        if (child != null) {
+            return child.getChild();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
-    public EnoviaEntity findRoleChildByName(EnoviaEntity enoviaEntityy, String name) {
-        List<EnoviaEntity> childList = enoviaEntityy.getChild();
-        for (EnoviaEntity each : childList) {
+
+    public EnoviaEntity findRoleChildByName(List<EnoviaEntity> enoviaEntity, String name) {
+        for (EnoviaEntity each : enoviaEntity) {
             if (each.getEmatrix().getRole().getAdminProperties().getName().equals(name)) {
                 return each;
             } else {
-                findRoleChildByName(each, name);
+                EnoviaEntity found = findRoleChildByName(each.getChild(), name);
+                if (found != null) {
+                    return found;
+                }
             }
         }
 

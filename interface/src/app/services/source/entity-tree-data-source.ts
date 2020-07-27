@@ -53,24 +53,16 @@ export class EntityTreeDataSource {
 
     if (expand) {
       console.log(node.type);
+      const lambda = (items: EnoviaEntity[]) => {
+        const tmpItems = items.map(item => this.transformFunction(item, node.level + 1));
+        this.data.splice(index + 1, 0, ...tmpItems);
+        node.isLoading = false;
+        this.enoviaEntitySubject.next(this.data);
+      }
       if (node.type != 'role') {
-        this.entityService.getEntities(this.releaseId, node.type, this.searchWord).toPromise().then(items => {
-          const tmpItems = items.map(item => this.transformFunction(item, 1));
-          this.data.splice(index + 1, 0, ...tmpItems);
-          node.isLoading = false;
-          this.enoviaEntitySubject.next(this.data);
-        });
+        this.entityService.getEntities(this.releaseId, node.type, this.searchWord).toPromise().then(lambda);
       } else {
-        if (node.name == 'role') {
-          this.entityService.getRoleEntities(this.releaseId, this.searchWord).toPromise().then(items => {
-            const tmpItems = items.map(item => this.transformFunction(item, node.level + 1));
-            this.data.splice(index + 1, 0, ...tmpItems);
-            node.isLoading = false;
-            this.enoviaEntitySubject.next(this.data);
-          });
-        } else {
-
-        }
+        this.entityService.getRoleEntities(this.releaseId, node.name, this.searchWord).toPromise().then(lambda);
       }
     } else {
       let count = 0;
