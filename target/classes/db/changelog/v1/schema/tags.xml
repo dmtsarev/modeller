@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="Create table tags_type" author="Pavlova">
+
+        <createSequence cycle="false" incrementBy="1" maxValue="9223372036854775807" minValue="1"
+                        sequenceName="tags_type_id_seq" startValue="1"/>
+
+        <createTable tableName="tags_type">
+            <column name="id" type="bigint" defaultValueSequenceNext="tags_type_id_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="character varying(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="color" type="character varying(256)"/>
+            <column name="description" type="character varying"/>
+        </createTable>
+
+        <addUniqueConstraint columnNames="name"
+                             constraintName="unique_name_tag_type"
+                             tableName="tags_type"/>
+
+
+    </changeSet>
+
+    <changeSet id="Create table tags" author="Pavlova">
+
+        <createSequence cycle="false" incrementBy="1" maxValue="9223372036854775807" minValue="1"
+                        sequenceName="tags_id_seq" startValue="1"/>
+
+        <createTable tableName="tags">
+            <column name="id" type="bigint" defaultValueSequenceNext="tags_id_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="character varying(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="character varying"/>
+            <column name="type" type="bigint"/>
+        </createTable>
+
+        <addUniqueConstraint columnNames="name"
+                             constraintName="unique_name_tags"
+                             tableName="tags"/>
+
+        <addForeignKeyConstraint baseColumnNames="type"
+                                 baseTableName="tags"
+                                 constraintName="fk_tags_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tags_type"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+    </changeSet>
+
+    <changeSet id="Create table tags_entity" author="Pavlova">
+
+        <createTable tableName="tags_entity">
+            <column name="tags_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entities_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                columnNames="tags_id, entities_id"
+                constraintName="pk_tags_entity"
+                tableName="tags_entity"/>
+
+        <addForeignKeyConstraint baseColumnNames="tags_id"
+                                 baseTableName="tags_entity"
+                                 constraintName="fk_tags_entity_tags"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tags"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint baseColumnNames="entities_id"
+                                 baseTableName="tags_entity"
+                                 constraintName="fk_tags_entity_entity"
+                                 referencedColumnNames="id"
+                                 referencedTableName="entities"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

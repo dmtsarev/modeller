@@ -30,25 +30,6 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://jfrog.niaepnn.ru/artifactory/list/libs-release/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <url>http://jfrog.niaepnn.ru/artifactory/list/libs-release/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -167,7 +148,7 @@
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-jdk8</artifactId>
+            <artifactId>mapstruct</artifactId>
             <version>RELEASE</version>
         </dependency>
     </dependencies>
@@ -194,6 +175,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version> RELEASE</version>
                 <configuration>
                     <executable>true</executable>
                 </configuration>
@@ -234,7 +216,7 @@
                     <driver>org.postgresql.Driver</driver>
                     <url>jdbc:postgresql://localhost:6432/enomanager</url>
                     <username>postgres</username>
-                    <password></password>
+                    <password> 12345 </password>
                     <systemProperties>
                         <user.name>DmitriySivolovskiy</user.name>
                     </systemProperties>

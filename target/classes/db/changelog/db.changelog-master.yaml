@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - include:
+      # db -v1
+      # schema
+      file: db/changelog/v1/schema/releases.xml
+  - include:
+      file: db/changelog/v1/schema/security.xml
+  - include:
+      file: db/changelog/v1/schema/tags.xml
+  - include:
+      file: db/changelog/v1/schema/db.changelog-20191002-122655734.xml
+
+
+      # data
+  - include:
+      file: db/changelog/v1/data/security.xml
+  - include:
+      file: db/changelog/v1/data/tags.xml

@@ -25,12 +25,16 @@ public class Ematrix {
     @XmlElement(name = "relationshipDef")
     private RelationshipDef relationshipDef;
 
+    @XmlElement(name = "policy")
+    private Policy policy;
+
     public Ematrix(Ematrix ematrix) {
         this.type = ematrix.type;
         this.attributeDef = ematrix.attributeDef;
         this.creationProperties = ematrix.creationProperties;
         this.interfaceType = ematrix.interfaceType;
         this.relationshipDef = ematrix.relationshipDef;
+        this.policy = ematrix.policy;
     }
 
     public Ematrix() {}
@@ -59,6 +63,10 @@ public class Ematrix {
         this.creationProperties = creationProperties;
     }
 
+    public Policy getPolicy() { return policy; }
+
+    public void setPolicy(Policy policy) { this.policy = policy; }
+
     public Type getType() {
         return type;
     }
@@ -83,6 +91,7 @@ public class Ematrix {
                 ", interfaceType=" + interfaceType +
                 ", attributeDef=" + attributeDef +
                 ", relationshipDef=" + relationshipDef +
+                ", policy =" + policy +
                 '}';
     }
 }
