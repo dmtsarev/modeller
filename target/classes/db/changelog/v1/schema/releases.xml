@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="Create table projects" author="Sivolovskii">
+        <createSequence cycle="false" incrementBy="1" maxValue="9223372036854775807"  minValue="1" sequenceName="projects_id_seq" startValue="1"/>
+        <createTable tableName="projects">
+            <column name="id" type="bigint" defaultValueSequenceNext="projects_id_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="project_name" type="character varying(256)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="unique_project_name"/>
+            </column>
+            <column name="description" type="character varying"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Create table releases" author="Sivolovskii">
+
+        <createSequence cycle="false" incrementBy="1" maxValue="9223372036854775807"  minValue="1" sequenceName="releases_id_seq" startValue="1"/>
+
+        <createTable tableName="releases">
+            <column name="id" type="bigint" defaultValueSequenceNext="releases_id_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="branch_name" type="character varying(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="character varying"/>
+            <column name="ext_release_id" type="character varying(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_name" type="character varying(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_projects" references="projects(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Create table entities" author="Sivolovskii">
+
+        <createSequence cycle="false" incrementBy="1" maxValue="9223372036854775807"  minValue="1" sequenceName="entities_id_seq" startValue="1"/>
+
+        <createTable tableName="entities">
+            <column name="id" type="bigint" defaultValueSequenceNext="entities_id_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="character varying(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="type" type="character varying">
+                <constraints nullable="false"/>
+            </column>
+            <column name="release_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_name" type="character varying(256)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="release_id"
+                                 baseTableName="entities"
+                                 constraintName="fk_entities_releases"
+                                 referencedColumnNames="id"
+                                 referencedTableName="releases"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+        </changeSet>
+</databaseChangeLog>
