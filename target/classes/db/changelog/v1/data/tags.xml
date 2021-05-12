@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="insert type model to tags_type" author="Pavlova">
+        <insert tableName="tags_type">
+            <column name="name" value="Model"/>
+            <column name="color" value="#ffd740"/>
+            <column name="description" value="Тип модели данных"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert type functional to tags_type" author="Pavlova">
+        <insert tableName="tags_type">
+            <column name="name" value="Functional"/>
+            <column name="color" value="#673ab7"/>
+            <column name="description" value="Функциональный тип"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

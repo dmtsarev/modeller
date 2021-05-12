@@ -5,8 +5,10 @@ import javax.xml.bind.annotation.XmlElement;
 public class RelationshipDef {
     @XmlElement(name = "adminProperties")
     private AdminProperties adminProperties;
+
     @XmlElement(name = "fromSide")
     private Side fromSide;
+
     @XmlElement(name = "toSide")
     private Side toSide;
 

@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "enoInterface"
+  "defaultProject": "enoInterface",
+  "cli": {
+    "analytics": "df8399f6-0fe3-402a-9e60-5b430a271e6c"
+  }
 }
