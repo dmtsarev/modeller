@@ -14,6 +14,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import ru.ase.ims.enomanager.model.enovia.*;
 import ru.ase.ims.enomanager.model.enovia.EnoviaPolicy;
 import ru.ase.ims.enomanager.model.enovia.xml.Ematrix;
+import ru.ase.ims.enomanager.service.JavaParser;
 import ru.ase.ims.enomanager.service.git.GitManager;
 
 import javax.xml.XMLConstants;
@@ -29,6 +30,7 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -87,6 +89,9 @@ public class DefaultXMLReader implements XMLReader {
             return new EnoviaInterface(item);
         } else if (type.startsWith("relationship")) {
             return new EnoviaRelationship(item);
+        } else if (type.startsWith("program")) {
+            return new EnoviaProgram(item);
+//          List<String> methods = JavaParser.parseMethods(source);
         } else if (type.startsWith("policy")) {
               return new EnoviaPolicy(item);
         }
