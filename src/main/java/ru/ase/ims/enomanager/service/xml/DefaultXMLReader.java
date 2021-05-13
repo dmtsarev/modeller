@@ -12,6 +12,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLReaderFactory;
 import ru.ase.ims.enomanager.model.enovia.*;
+import ru.ase.ims.enomanager.model.enovia.EnoviaPolicy;
 import ru.ase.ims.enomanager.model.enovia.xml.Ematrix;
 import ru.ase.ims.enomanager.service.git.GitManager;
 
@@ -86,6 +87,8 @@ public class DefaultXMLReader implements XMLReader {
             return new EnoviaInterface(item);
         } else if (type.startsWith("relationship")) {
             return new EnoviaRelationship(item);
+        } else if (type.startsWith("policy")) {
+              return new EnoviaPolicy(item);
         }
         return null;
     }

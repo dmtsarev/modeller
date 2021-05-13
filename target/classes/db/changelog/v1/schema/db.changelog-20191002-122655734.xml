@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="DmitriySivolovskiy (generated)" id="1570019220233-15">
+        <createSequence sequenceName="git_repositories_id_seq"/>
+    </changeSet>
+    <changeSet author="DmitriySivolovskiy (generated)" id="1570019220233-16">
+        <createTable tableName="git_repositories">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="git_repositoriesPK"/>
+            </column>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="uri" type="VARCHAR(255)"/>
+            <column name="username" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="DmitriySivolovskiy (generated)" id="1570019220233-17">
+        <addColumn tableName="projects">
+            <column name="git_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="DmitriySivolovskiy (generated)" id="1570019220233-18">
+        <addColumn tableName="projects">
+            <column name="status" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="DmitriySivolovskiy (generated)" id="1570019220233-19">
+        <createIndex indexName="IX_null" tableName="tags_entity" unique="true">
+            <column name="entities_id"/>
+            <column name="tags_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="DmitriySivolovskiy (generated)" id="1570019220233-20">
+        <addForeignKeyConstraint baseColumnNames="git_id" baseTableName="projects" constraintName="FK2ij36emvvceacfpdkexilj9ep" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="git_repositories" validate="true"/>
+    </changeSet>
+    <changeSet author="DmitriySivolovskiy (generated)" id="1570019220233-21">
+        <addForeignKeyConstraint baseColumnNames="project_id" baseTableName="users" constraintName="FKj4xjs6i0exxcgearpuykol477" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="projects" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
