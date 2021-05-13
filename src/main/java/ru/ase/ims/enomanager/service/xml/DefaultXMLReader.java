@@ -89,6 +89,8 @@ public class DefaultXMLReader implements XMLReader {
             return new EnoviaInterface(item);
         } else if (type.startsWith("relationship")) {
             return new EnoviaRelationship(item);
+        } else if (type.startsWith("role")) {
+            return new EnoviaRole(item);
         } else if (type.startsWith("program")) {
             return new EnoviaProgram(item);
 //          List<String> methods = JavaParser.parseMethods(source);
