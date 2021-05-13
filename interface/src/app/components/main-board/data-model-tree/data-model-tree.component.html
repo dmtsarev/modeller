@@ -14,7 +14,11 @@
         {{dataSource.treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
       </mat-icon>
     </button>
-    {{node.name}}
+
+    <div *ngIf="node.type === 'role' && node.name !== 'role'; then content else other_content"></div>
+    <ng-template #content><p (click)="nodeClicked(node)">{{node.name}}</p></ng-template>
+    <ng-template #other_content>{{node.name}}</ng-template>
+
     <mat-progress-bar *ngIf="node.isLoading" mode="indeterminate" class="example-tree-progress-bar"></mat-progress-bar>
   </mat-tree-node>
 </mat-tree>
