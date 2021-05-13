@@ -23,7 +23,8 @@ export class EntityTreeDataSource {
   private flatTreeDataSource: MatTreeFlatDataSource<EnoviaEntity, EnoviaEntityFlatNode>;
   transformFunction: (node: EnoviaEntity, nodeLevel: number) => EnoviaEntityFlatNode;
   private readonly treeFlattener: MatTreeFlattener<EnoviaEntity, EnoviaEntityFlatNode>;
-  private rootNodes = ['attributeDef', 'interface', 'relationship', 'type', 'role'];
+  private rootNodes = ['attributeDef', 'interface', 'relationship', 'type', 'policy', 'program', 'role'];
+
 
   constructor(private entityService: EntityService, private releaseId: number) {
     this.transformFunction = (node: EnoviaEntity, level: number) => {

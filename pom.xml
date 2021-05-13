@@ -175,6 +175,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version> RELEASE</version>
                 <configuration>
                     <executable>true</executable>
                 </configuration>
@@ -215,7 +216,7 @@
                     <driver>org.postgresql.Driver</driver>
                     <url>jdbc:postgresql://localhost:6432/enomanager</url>
                     <username>postgres</username>
-                    <password></password>
+                    <password> 12345 </password>
                     <systemProperties>
                         <user.name>DmitriySivolovskiy</user.name>
                     </systemProperties>

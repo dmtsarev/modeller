@@ -126,6 +126,7 @@ public class EnoviaEntity {
                 '}';
     }
 
+
     public EnoviaEntity addChild(EnoviaEntity child) {
         this.child.add(child);
         return child;
@@ -138,4 +139,5 @@ public class EnoviaEntity {
     public List<EnoviaEntity> getChild() {
         return child;
     }
+
 }

@@ -30,7 +30,7 @@ application:
 spring:
   profiles: localPostgres
   datasource:
-    url: jdbc:postgresql://localhost:6432/enomanager
+    url: jdbc:postgresql://localhost:5432/enomanager
     username: postgres
     password: admin
     driverClassName: org.postgresql.Driver

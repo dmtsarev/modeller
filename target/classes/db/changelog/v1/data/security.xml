@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="insert roles admin" author="Pavlova">
+        <insert tableName="roles">
+            <column name="mnemonic" value="admin"/>
+            <column name="role_name" value="ADMIN"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert roles business_admin" author="Pavlova">
+        <insert tableName="roles">
+            <column name="mnemonic" value="business_admin"/>
+            <column name="role_name" value="BUSINESS_ADMIN"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert roles business_user" author="Pavlova">
+        <insert tableName="roles">
+            <column name="mnemonic" value="business_user"/>
+            <column name="role_name" value="BUSINESS_USER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert user admin" author="Pavlova">
+        <insert tableName="users">
+            <column name="user_name" value="admin"/>
+            <column name="password" value="$2a$10$9ZwlxRThXMW1WwTDBykvY.D3QyV/U/i0djip3mdkL4z3SYKSq9Do6"/>
+            <column name="role_mnemonic" value="admin"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert user business_admin" author="Pavlova">
+        <insert tableName="users">
+            <column name="user_name" value="business_admin"/>
+            <column name="password" value="$2a$10$TITrKQukg34FHCqcuFyoz.ut6pHmI7gwYD6idKYV6EsqMrvi188vG"/>
+            <column name="role_mnemonic" value="business_admin"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert user business_user" author="Pavlova">
+        <insert tableName="users">
+            <column name="user_name" value="business_user"/>
+            <column name="password" value="$2a$10$RDjoAzawpdg86KfnMZIkxeAQWSiqPznikXvPUulikzj9Xf5RaZzHO"/>
+            <column name="role_mnemonic" value="business_user"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert role business_analyst" author="Pavlova">
+        <insert tableName="roles">
+            <column name="mnemonic" value="business_analyst"/>
+            <column name="role_name" value="BUSINESS_ANALYST"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert role analyst" author="Pavlova">
+        <insert tableName="roles">
+            <column name="mnemonic" value="analyst"/>
+            <column name="role_name" value="ANALYST"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission view" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="view"/>
+            <column name="permission" value="Просмотр содержимого"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission create_release" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="create_release"/>
+            <column name="permission" value="Создание релиза"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission create_comment" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="create_comment"/>
+            <column name="permission" value="Создание комментария"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission create_model" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="create_model"/>
+            <column name="permission" value="Создание комментария к модели"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission remove_release" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="remove_release"/>
+            <column name="permission" value="Удаление релиза"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission remove_comment" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="remove_comment"/>
+            <column name="permission" value="Удаление комментария"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission remove_model" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="remove_model"/>
+            <column name="permission" value="Удаление комментария к модели"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission create_user" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="create_user"/>
+            <column name="permission" value="Создание пользователя"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert permission admin" author="Pavlova">
+        <insert tableName="permissions">
+            <column name="mnemonic" value="admin"/>
+            <column name="permission" value="Администратор системы"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert role_permission business_user" author="Pavlova">
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_user"/>
+            <column name="permission_id" value="view"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert role_permission analyst" author="Pavlova">
+        <insert tableName="role_permission">
+            <column name="role_id" value="analyst"/>
+            <column name="permission_id" value="view"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="analyst"/>
+            <column name="permission_id" value="create_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="analyst"/>
+            <column name="permission_id" value="create_model"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="analyst"/>
+            <column name="permission_id" value="remove_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="analyst"/>
+            <column name="permission_id" value="remove_model"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert role_permission business_analyst" author="Pavlova">
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_analyst"/>
+            <column name="permission_id" value="view"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_analyst"/>
+            <column name="permission_id" value="create_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_analyst"/>
+            <column name="permission_id" value="create_model"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_analyst"/>
+            <column name="permission_id" value="create_release"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_analyst"/>
+            <column name="permission_id" value="remove_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_analyst"/>
+            <column name="permission_id" value="remove_model"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_analyst"/>
+            <column name="permission_id" value="remove_release"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert role_permission business_admin" author="Pavlova">
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="view"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="create_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="create_model"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="create_release"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="remove_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="remove_model"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="remove_release"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="business_admin"/>
+            <column name="permission_id" value="create_user"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert role_permission admin" author="Pavlova">
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="view"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="create_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="create_model"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="create_release"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="remove_comment"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="remove_model"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="remove_release"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="create_user"/>
+        </insert>
+        <insert tableName="role_permission">
+            <column name="role_id" value="admin"/>
+            <column name="permission_id" value="admin"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
